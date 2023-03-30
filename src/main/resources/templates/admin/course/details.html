@@ -279,7 +279,7 @@
                                                           th:errors="*{expiredAt}">EndAt Error</span>
                                                 </div>
                                                 <input type="text" class="form-control" id="expiredAt" name="expiredAt"
-                                                       th:value="${#temporals.format(course.expiredAt, 'yyyy-MM-dd')}">
+                                                       th:value="${#dates.format(course.expiredAt, 'yyyy-MM-dd')}">
                                             </div>
                                             <div class="form-group">
                                                 <label for="active" class="required-label">Trạng thái</label>

@@ -41,8 +41,7 @@ public class User {
     private String gender ;
 
     @Column(name = "date_of_birth")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate dateOfBirth;
+    private Date dateOfBirth;
 
     @Column(name = "password",nullable = false)
     private String password;

@@ -337,7 +337,7 @@
                                                 </td>
                                                 <td>
                                                     <th:block th:if="${course.active} == 1">
-                                                        <span th:text="${#temporals.format(course.expiredAt, 'dd-MM-yyyy')}"></span>
+                                                        <span th:text="${#dates.format(course.expiredAt, 'dd-MM-yyyy')}"></span>
                                                     </th:block>
 
                                                 </td>

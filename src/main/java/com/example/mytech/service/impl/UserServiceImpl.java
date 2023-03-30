@@ -13,6 +13,7 @@ import com.example.mytech.repository.UserCourseRepository;
 import com.example.mytech.repository.UserRepository;
 import com.example.mytech.service.ImageService;
 import com.example.mytech.service.UserService;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityNotFoundException;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -56,6 +58,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.findAll();
     }
 
+    @SneakyThrows
     @Override
     public User createUser(UserRep rep) {
         User user = new User();
@@ -81,9 +84,10 @@ public class UserServiceImpl implements UserService {
         user.setCreatedAt(new Timestamp(System.currentTimeMillis()));
 
         String dateString = String.valueOf(rep.getDateOfBirth());
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDate date = LocalDate.parse(dateString, formatter);
-        user.setDateOfBirth(date.plusDays(1));
+        SimpleDateFormat formatter = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");
+        Date dateformater = formatter.parse(dateString);
+
+        user.setDateOfBirth(dateformater);
 
         user.setStatus(true);
 
@@ -188,6 +192,7 @@ public class UserServiceImpl implements UserService {
     public List<User> getUserWithRoleUser() {
         return userRepository.findUsersWithUserRole();
     }
+    @SneakyThrows
     @Override
     public User updateUser(String id, UserRep rep) {
         User user;
@@ -207,9 +212,10 @@ public class UserServiceImpl implements UserService {
         user.setImage(rep.getImage());
 
         String dateString = String.valueOf(rep.getDateOfBirth());
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDate date = LocalDate.parse(dateString, formatter);
-        user.setDateOfBirth(date.plusDays(1));
+        SimpleDateFormat formatter = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");
+        Date dateformater = formatter.parse(dateString);
+
+        user.setDateOfBirth(dateformater);
 
         user.setAddress(rep.getAddress());
 

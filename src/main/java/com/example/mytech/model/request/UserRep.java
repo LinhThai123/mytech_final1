@@ -41,7 +41,7 @@ public class UserRep {
     private String address;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate dateOfBirth;
+    private Date dateOfBirth;
 
     private String image ;
 

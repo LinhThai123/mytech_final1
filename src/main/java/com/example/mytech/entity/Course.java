@@ -64,7 +64,7 @@ public class Course {
 
 
     @Column(name = "expired_at")
-    private LocalDate expiredAt;
+    private Date expiredAt;
 
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)

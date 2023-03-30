@@ -14,6 +14,7 @@ import com.example.mytech.repository.UserCourseRepository;
 import com.example.mytech.repository.UserRepository;
 import com.example.mytech.service.*;
 import com.github.slugify.Slugify;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -23,6 +24,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -73,20 +75,21 @@ public class CourseServiceImpl implements CourseService {
         return courseRepository.findCourseByIdOrNameContaining(id, name, pageable);
     }
 
+    @SneakyThrows
     @Override
     public Course createCourse(CourseRep rep) {
         Course course = new Course();
         //check end_at
-        LocalDate date = LocalDate.now();
-
+        Date date = new Date(System.currentTimeMillis()) ;
         String dateString = String.valueOf(rep.getExpiredAt());
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDate dateformater = LocalDate.parse(dateString, formatter);
+        SimpleDateFormat formatter = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");
+        Date dateformater = formatter.parse(dateString);
 
-        if (dateformater.isBefore(date)) {
+        if (dateformater.before(date)) {
             throw new BadRequestException("Hạn kết thúc khóa học không hợp lệ");
         }
-        course.setExpiredAt(dateformater.plusDays(1));
+
+        course.setExpiredAt(dateformater);
         //check exits name
         if (courseRepository.existsByName(rep.getName())) {
             throw new BadRequestException("Tên khóa học đã tồn tại");
@@ -147,6 +150,7 @@ public class CourseServiceImpl implements CourseService {
         return course;
     }
 
+    @SneakyThrows
     @Override
     public Course updateCourse(String id, CourseRep rep) {
         Course course;
@@ -156,18 +160,17 @@ public class CourseServiceImpl implements CourseService {
             throw new NotFoundException("Course do not exits");
         }
 
-        LocalDate date = LocalDate.now();
+        Date date = new Date(System.currentTimeMillis()) ;
         String dateString = String.valueOf(rep.getExpiredAt());
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDate dateformater = LocalDate.parse(dateString, formatter);
+        SimpleDateFormat formatter = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");
+        Date dateformater = formatter.parse(dateString);
 
-        if (dateformater.isBefore(date)) {
+        if (dateformater.before(date)) {
             throw new BadRequestException("Hạn kết thúc khóa học không hợp lệ");
         }
-        course.setExpiredAt(dateformater.plusDays(1));
+        course.setExpiredAt(dateformater);
 
         course.setName(rep.getName());
-
         // set slug
         Slugify slg = new Slugify();
         course.setSlug(slg.slugify(rep.getName()));

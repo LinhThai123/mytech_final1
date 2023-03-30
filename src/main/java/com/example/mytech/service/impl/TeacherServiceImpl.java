@@ -11,6 +11,7 @@ import com.example.mytech.model.request.UserRep;
 import com.example.mytech.repository.RoleRepository;
 import com.example.mytech.repository.UserRepository;
 import com.example.mytech.service.TeacherService;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,12 +21,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Component
 public class TeacherServiceImpl implements TeacherService {
@@ -49,6 +48,7 @@ public class TeacherServiceImpl implements TeacherService {
         return userRepository.findTeacherByNameOrId(id, nameStudent,pageable);
     }
 
+    @SneakyThrows
     @Override
     public User createTeacher(UserRep rep) {
         User teacher = new User();
@@ -74,9 +74,10 @@ public class TeacherServiceImpl implements TeacherService {
         teacher.setCreatedAt(new Timestamp(System.currentTimeMillis()));
 
         String dateString = String.valueOf(rep.getDateOfBirth());
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDate date = LocalDate.parse(dateString, formatter);
-        teacher.setDateOfBirth(date.plusDays(1));
+        SimpleDateFormat formatter = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");
+        Date dateformater = formatter.parse(dateString);
+
+        teacher.setDateOfBirth(dateformater);
 
         teacher.setStatus(true);
 
@@ -121,6 +122,7 @@ public class TeacherServiceImpl implements TeacherService {
         return userRepository.findUsersWithTeacherRole();
     }
 
+    @SneakyThrows
     @Override
     public User updateTeacher(String id, UserRep rep) {
         User teacher;
@@ -140,9 +142,10 @@ public class TeacherServiceImpl implements TeacherService {
         teacher.setPhone(rep.getPhone());
 
         String dateString = String.valueOf(rep.getDateOfBirth());
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDate date = LocalDate.parse(dateString, formatter);
-        teacher.setDateOfBirth(date.plusDays(1));
+        SimpleDateFormat formatter = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");
+        Date dateformater = formatter.parse(dateString);
+
+        teacher.setDateOfBirth(dateformater);
 
         teacher.setAddress(rep.getAddress());
 

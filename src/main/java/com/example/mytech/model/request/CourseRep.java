@@ -41,7 +41,7 @@ public class CourseRep {
     private String image;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate expiredAt;
+    private Date expiredAt;
 
     private String teacher_id;
 
