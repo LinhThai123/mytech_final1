@@ -40,6 +40,7 @@ public class CourseRep {
 
     private String image;
 
+    @JsonProperty("expired_at")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date expiredAt;
 

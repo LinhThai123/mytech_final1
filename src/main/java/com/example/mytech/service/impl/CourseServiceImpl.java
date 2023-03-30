@@ -160,15 +160,11 @@ public class CourseServiceImpl implements CourseService {
             throw new NotFoundException("Course do not exits");
         }
 
-        Date date = new Date(System.currentTimeMillis()) ;
-        String dateString = String.valueOf(rep.getExpiredAt());
-        SimpleDateFormat formatter = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");
-        Date dateformater = formatter.parse(dateString);
-
-        if (dateformater.before(date)) {
+        Date date = new Date(System.currentTimeMillis());
+        if (rep.getExpiredAt().before(date)) {
             throw new BadRequestException("Hạn kết thúc khóa học không hợp lệ");
         }
-        course.setExpiredAt(dateformater);
+        course.setExpiredAt(rep.getExpiredAt());
 
         course.setName(rep.getName());
         // set slug
