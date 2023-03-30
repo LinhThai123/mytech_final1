@@ -1,0 +1,233 @@
+package com.example.mytech.service.impl;
+
+import com.example.mytech.config.Contant;
+import com.example.mytech.entity.Category;
+import com.example.mytech.entity.Course;
+import com.example.mytech.entity.User;
+import com.example.mytech.entity.UserCourse;
+import com.example.mytech.exception.BadRequestException;
+import com.example.mytech.exception.InternalServerException;
+import com.example.mytech.exception.NotFoundException;
+import com.example.mytech.model.request.CourseRep;
+import com.example.mytech.repository.CourseRepository;
+import com.example.mytech.repository.UserCourseRepository;
+import com.example.mytech.repository.UserRepository;
+import com.example.mytech.service.*;
+import com.github.slugify.Slugify;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+
+@Component
+public class CourseServiceImpl implements CourseService {
+
+    @Autowired
+    private CourseRepository courseRepository;
+
+    @Autowired
+    private CategoryService categoryService;
+
+    @Autowired
+    private ImageService imageService;
+
+    @Autowired
+    private TeacherService teacherService;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private UserCourseRepository userCourseRepository;
+
+    @Override
+    public List<Course> getListCourse() {
+        return courseRepository.findAll();
+    }
+
+    @Override
+    public Course getCourseById(String id) {
+        Optional<Course> course = courseRepository.findById(id);
+        if (!course.isPresent()) {
+            throw new NotFoundException("Course do not exits");
+        }
+        return course.get();
+    }
+
+    @Override
+    public Page<Course> adminGetListCourses(String id, String name, Integer page) {
+        page--;
+        if (page < 0) {
+            page = 0;
+        }
+        Pageable pageable = PageRequest.of(page, Contant.LIMIT_COURSE, Sort.by("createdAt").descending());
+        return courseRepository.findCourseByIdOrNameContaining(id, name, pageable);
+    }
+
+    @Override
+    public Course createCourse(CourseRep rep) {
+        Course course = new Course();
+        //check end_at
+        LocalDate date = LocalDate.now();
+
+        String dateString = String.valueOf(rep.getExpiredAt());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate dateformater = LocalDate.parse(dateString, formatter);
+
+        if (dateformater.isBefore(date)) {
+            throw new BadRequestException("Hạn kết thúc khóa học không hợp lệ");
+        }
+        course.setExpiredAt(dateformater.plusDays(1));
+        //check exits name
+        if (courseRepository.existsByName(rep.getName())) {
+            throw new BadRequestException("Tên khóa học đã tồn tại");
+        }
+        course.setName(rep.getName());
+
+        // set slug
+        Slugify slg = new Slugify();
+        course.setSlug(slg.slugify(rep.getName()));
+
+        // set price
+        course.setPrice(rep.getPrice());
+
+        course.setDescription(rep.getDescription().replaceAll("<p>|</p>", ""));
+
+        if (rep.getActive() == Contant.PUBLIC_COURSE) {
+            // Public post
+            if (rep.getDescription().isEmpty()) {
+                throw new BadRequestException("Để công khai khóa học vui lòng nhập mô tả ");
+            }
+            if (rep.getImage().isEmpty()) {
+                throw new BadRequestException("Để công khai khóa học vui lòng thêm ảnh ");
+            }
+            course.setPublishedAt(new Timestamp(System.currentTimeMillis()));
+        }
+        course.setActive(rep.getActive());
+
+        course.setStatus(rep.getStatus());
+
+        // image of course
+        course.setImage(rep.getImage());
+
+        course.setLevel(rep.getLevel());
+
+        // get list category by id
+        if (rep.getCategory_id().isEmpty()) {
+            throw new BadRequestException("Vui lòng chọn danh mục cho khóa học");
+        }
+        Category category = categoryService.getCategoryById(rep.getCategory_id());
+        course.setCategory(category);
+
+        course.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+        course.setModifiedAt(new Timestamp(System.currentTimeMillis()));
+
+        User teacher = teacherService.getTeacherById(rep.getTeacher_id());
+        course.setUsers(Collections.singleton(teacher));
+
+        try {
+            courseRepository.save(course);
+            UserCourse userCourse = new UserCourse();
+            userCourse.setCourse(course);
+            userCourse.setUser(teacher);
+            userCourse.setEnrollDate(LocalDateTime.now());
+            userCourseRepository.save(userCourse);
+        } catch (Exception e) {
+            throw new InternalServerException(e.getMessage());
+        }
+        return course;
+    }
+
+    @Override
+    public Course updateCourse(String id, CourseRep rep) {
+        Course course;
+        Optional<Course> rs = courseRepository.findById(id);
+        course = rs.get();
+        if (!rs.isPresent()) {
+            throw new NotFoundException("Course do not exits");
+        }
+
+        LocalDate date = LocalDate.now();
+        String dateString = String.valueOf(rep.getExpiredAt());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate dateformater = LocalDate.parse(dateString, formatter);
+
+        if (dateformater.isBefore(date)) {
+            throw new BadRequestException("Hạn kết thúc khóa học không hợp lệ");
+        }
+        course.setExpiredAt(dateformater.plusDays(1));
+
+        course.setName(rep.getName());
+
+        // set slug
+        Slugify slg = new Slugify();
+        course.setSlug(slg.slugify(rep.getName()));
+
+        // set price
+        course.setPrice(rep.getPrice());
+
+        course.setDescription(rep.getDescription().replaceAll("<p>|</p>", ""));
+
+        if (rep.getActive() == Contant.PUBLIC_COURSE) {
+
+            course.setPublishedAt(new Timestamp(System.currentTimeMillis()));
+        }
+        course.setActive(rep.getActive());
+
+        course.setStatus(rep.getStatus());
+        // image of course
+        course.setImage(rep.getImage());
+
+        course.setLevel(rep.getLevel());
+
+        // get list category by id
+        if (rep.getCategory_id().isEmpty()) {
+            throw new BadRequestException("Vui lòng chọn danh mục cho khóa học");
+        }
+        Category category = categoryService.getCategoryById(rep.getCategory_id());
+        course.setCategory(category);
+
+        course.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+        course.setModifiedAt(new Timestamp(System.currentTimeMillis()));
+        course.setId(id);
+        try {
+            courseRepository.save(course);
+        } catch (Exception e) {
+            throw new InternalServerException(e.getMessage());
+        }
+        return course;
+    }
+
+    @Override
+    public void deleteCourse(Course course) {
+        courseRepository.delete(course);
+    }
+
+    @Override
+    public List<Course> findCoursesByTeacherId(String userId) {
+        return courseRepository.findCoursesByTeacherId(userId);
+    }
+
+    @Override
+    public String uploadFile(MultipartFile file) {
+        return imageService.uploadFile(file);
+    }
+
+    @Override
+    public byte[] readFile(String fileId) {
+        return imageService.readFile(fileId);
+    }
+
+}
