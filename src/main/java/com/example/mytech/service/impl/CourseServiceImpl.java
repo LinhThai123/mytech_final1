@@ -47,9 +47,6 @@ public class CourseServiceImpl implements CourseService {
     private TeacherService teacherService;
 
     @Autowired
-    private UserService userService;
-
-    @Autowired
     private UserCourseRepository userCourseRepository;
 
     @Override

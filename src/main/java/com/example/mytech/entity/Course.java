@@ -64,7 +64,6 @@ public class Course {
 
 
     @Column(name = "expired_at")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate expiredAt;
 
     @ManyToOne

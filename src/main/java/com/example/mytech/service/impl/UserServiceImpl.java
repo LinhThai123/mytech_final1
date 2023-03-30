@@ -283,6 +283,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<Course> enrollCourse(String userId, String courseId) {
+
         // Lấy thông tin học viên
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy học viên với ID = " + userId));

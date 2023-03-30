@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 public class EnrollmentApiController {
 
-    private static  final Logger logger = LoggerFactory.getLogger(EnrollmentApiController.class) ;
     @Autowired
     private UserService userService ;
 
