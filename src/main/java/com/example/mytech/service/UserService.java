@@ -4,6 +4,7 @@ package com.example.mytech.service;
 import com.example.mytech.entity.Course;
 import com.example.mytech.entity.User;
 import com.example.mytech.model.request.RegisterRep;
+import com.example.mytech.model.request.UpdateProfileReq;
 import com.example.mytech.model.request.UserRep;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -35,6 +36,9 @@ public interface UserService {
 
     // find by id
     public User getUserById (String id) ;
+
+    // update profile
+    public User updateProfile (User user , UpdateProfileReq req) ;
 
     // uploadFile
     public String uploadFile(MultipartFile file) ;

@@ -6,6 +6,7 @@ import com.example.mytech.exception.BadRequestException;
 import com.example.mytech.exception.InternalServerException;
 import com.example.mytech.exception.NotFoundException;
 import com.example.mytech.model.request.RegisterRep;
+import com.example.mytech.model.request.UpdateProfileReq;
 import com.example.mytech.model.request.UserRep;
 import com.example.mytech.repository.CourseRepository;
 import com.example.mytech.repository.RoleRepository;
@@ -262,6 +263,23 @@ public class UserServiceImpl implements UserService {
             throw new NotFoundException("User do not exits");
         }
         return rs.get();
+    }
+
+    @Override
+    public User updateProfile(User user, UpdateProfileReq req) {
+        user.setName(req.getName());
+        user.setDateOfBirth(req.getDateOfBirth());
+        user.setGender(req.getGender());
+        user.setAddress(req.getAddress());
+        user.setPhone(req.getPhone());
+        user.setModifiedAt(new Timestamp(System.currentTimeMillis())); // ẩn trên giao diên
+        try{
+            userRepository.save(user);
+            return user ;
+        }
+        catch (Exception e) {
+            throw new InternalServerException("Cập nhật profile thất bại");
+        }
     }
 
     @Override

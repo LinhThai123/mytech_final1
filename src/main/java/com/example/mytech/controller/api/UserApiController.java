@@ -19,6 +19,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.socket.WebSocketHandler;
 
 import javax.validation.Valid;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 
@@ -68,22 +69,22 @@ public class UserApiController {
             Optional<User> optionalUser = Optional.ofNullable(userRepository.findByEmail(userDetails.getUsername()));
             if (optionalUser.isPresent()) {
                 User user = optionalUser.get();
+                user.setCreatedAt(new Timestamp(System.currentTimeMillis()));
                 return ResponseEntity.ok().body(user);
             }
         }
         return  ResponseEntity.badRequest().body("Bạn cần đăng nhập để xem thông tin ");
     }
 
-//    @PostMapping("/update-profile")
-//    public ResponseEntity<?> updateProfile(@Valid @RequestBody UpdateProfileReq req) {
-//        User user = ((CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser();
-//
-//        user = userService.updateProfile(user, req);
-//        UserDetails principal = new CustomUserDetails(user);
-//        Authentication authentication = new UsernamePasswordAuthenticationToken(principal, null, principal.getAuthorities());
-//        SecurityContextHolder.getContext().setAuthentication(authentication);
-//
-//        return ResponseEntity.ok("Cập nhật profile thành công");
-//    }
+    @PostMapping("/update-profile")
+    public ResponseEntity<?> updateProfile(@Valid @RequestBody UpdateProfileReq req) {
+        User user = ((CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser();
+
+        user = userService.updateProfile(user, req);
+        UserDetails principal = new CustomUserDetails(user);
+        Authentication authentication = new UsernamePasswordAuthenticationToken(principal, null, principal.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        return ResponseEntity.ok("Cập nhật profile thành công");
+    }
 
 }
