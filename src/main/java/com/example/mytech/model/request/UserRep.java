@@ -40,6 +40,7 @@ public class UserRep {
     @NotBlank(message = "Địa chỉ trống")
     private String address;
 
+    @JsonProperty("date_of_birth")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date dateOfBirth;
 

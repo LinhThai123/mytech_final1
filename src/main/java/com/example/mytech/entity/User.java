@@ -74,7 +74,7 @@ public class User {
     @JsonIgnore
     private Set<Role> roles = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY , cascade = CascadeType.ALL)
     @JoinTable(
             name = "user_course",
             joinColumns = @JoinColumn(name = "user_id"),

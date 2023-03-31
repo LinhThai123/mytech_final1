@@ -73,11 +73,7 @@ public class TeacherServiceImpl implements TeacherService {
 
         teacher.setCreatedAt(new Timestamp(System.currentTimeMillis()));
 
-        String dateString = String.valueOf(rep.getDateOfBirth());
-        SimpleDateFormat formatter = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");
-        Date dateformater = formatter.parse(dateString);
-
-        teacher.setDateOfBirth(dateformater);
+        teacher.setDateOfBirth(rep.getDateOfBirth());
 
         teacher.setStatus(true);
 
@@ -141,11 +137,7 @@ public class TeacherServiceImpl implements TeacherService {
 
         teacher.setPhone(rep.getPhone());
 
-        String dateString = String.valueOf(rep.getDateOfBirth());
-        SimpleDateFormat formatter = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");
-        Date dateformater = formatter.parse(dateString);
-
-        teacher.setDateOfBirth(dateformater);
+        teacher.setDateOfBirth(rep.getDateOfBirth());
 
         teacher.setAddress(rep.getAddress());
 

@@ -75,4 +75,11 @@ public class Course {
     @JsonIgnore
     private Set<User> users = new HashSet<>();
 
+    @PreRemove
+    public void remove() {
+        for (User user : users) {
+            user.getCourses().remove(this);
+        }
+    }
+
 }

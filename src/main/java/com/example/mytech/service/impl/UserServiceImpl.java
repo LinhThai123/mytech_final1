@@ -83,11 +83,7 @@ public class UserServiceImpl implements UserService {
 
         user.setCreatedAt(new Timestamp(System.currentTimeMillis()));
 
-        String dateString = String.valueOf(rep.getDateOfBirth());
-        SimpleDateFormat formatter = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");
-        Date dateformater = formatter.parse(dateString);
-
-        user.setDateOfBirth(dateformater);
+        user.setDateOfBirth(rep.getDateOfBirth());
 
         user.setStatus(true);
 
@@ -211,11 +207,7 @@ public class UserServiceImpl implements UserService {
 
         user.setImage(rep.getImage());
 
-        String dateString = String.valueOf(rep.getDateOfBirth());
-        SimpleDateFormat formatter = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");
-        Date dateformater = formatter.parse(dateString);
-
-        user.setDateOfBirth(dateformater);
+        user.setDateOfBirth(rep.getDateOfBirth());
 
         user.setAddress(rep.getAddress());
 
