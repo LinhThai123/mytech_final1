@@ -1,6 +1,7 @@
 package com.example.mytech.websocket;
 
 import com.example.mytech.entity.Course;
+import com.example.mytech.model.dto.CourseDTO;
 import com.example.mytech.service.CourseService;
 import com.google.gson.Gson;
 import lombok.SneakyThrows;
@@ -14,6 +15,7 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 @Slf4j
@@ -50,18 +52,36 @@ public class WebSocketHandler extends TextWebSocketHandler {
     @SneakyThrows
     public void notifyCourseChange() {
         List<Course> courses = courseService.getListCourse();
+        List<CourseDTO> courseDTOs = courses.stream()
+                .map(course -> {
+
+                    CourseDTO courseDTO = new CourseDTO();
+                    // Chuyển đổi các trường từ course sang courseDTO
+                    courseDTO.setId(course.getId());
+                    courseDTO.setName(course.getName());
+                    courseDTO.setDescription(course.getDescription());
+                    courseDTO.setStatus(course.getStatus());
+                    courseDTO.setActive(course.getActive());
+                    courseDTO.setPrice(course.getPrice());
+                    courseDTO.setLevel(course.getLevel());
+                    courseDTO.setImage(course.getImage());
+                    courseDTO.setPublishedAt(course.getPublishedAt());
+                    courseDTO.setExpiredAt(course.getExpiredAt());
+                    courseDTO.setActive(course.getActive());
+
+                    // Các trường khác
+                    return courseDTO;
+                })
+                .collect(Collectors.toList());
 
         for (WebSocketSession session : sessions) {
             System.out.println(session.getId());
             if (session.isOpen()) {
-//                session.sendMessage(new TextMessage("hihi"));
-                session.sendMessage(new TextMessage(new Gson().toJson(courses)));
+                session.sendMessage(new TextMessage(new Gson().toJson(courseDTOs)));
                 log.info(" có session nào đang mở");
-
             } else {
                 log.info("Không có session nào đang mở");
             }
         }
-        log.info("chay xong for");
     }
 }
