@@ -8,6 +8,7 @@ import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @NoArgsConstructor
@@ -33,6 +34,9 @@ public class UserCourse {
     @JsonBackReference
     private Course course;
 
-    private LocalDateTime enrollDate;
+    private Timestamp enrollDate;
+
+    @Column(name = "status" ,columnDefinition = "TINYINT(0)")
+    private int status;
 
 }

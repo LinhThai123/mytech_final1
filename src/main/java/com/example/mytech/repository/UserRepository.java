@@ -1,5 +1,6 @@
 package com.example.mytech.repository;
 
+import com.example.mytech.entity.Course;
 import com.example.mytech.entity.ERole;
 import com.example.mytech.entity.User;
 import org.springframework.data.domain.Page;
@@ -22,8 +23,6 @@ public interface UserRepository extends JpaRepository<User, String> {
     User findByEmail (String email) ;
 
     List<User> findByIdAndRoles (String userId , ERole role) ;
-
-    User findByName(String name) ;
 
     // lấy danh sách role_user theo course id
     @Query("SELECT u FROM User u JOIN u.courses c JOIN u.roles r WHERE c.id = :courseId AND r.name = 'ROLE_USER'")

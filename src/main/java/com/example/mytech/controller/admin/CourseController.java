@@ -65,6 +65,7 @@ public class CourseController {
                     return rep;
                 }).collect(Collectors.toList());
     }
+
     @ModelAttribute("teachers")
     public List<UserRep> getTeachers() {
         return teacherService.getUserWithRoleTeacher().stream()
@@ -136,4 +137,6 @@ public class CourseController {
             return new ModelAndView("redirect:/admin/courses", model);
         }
     }
+
+
 }

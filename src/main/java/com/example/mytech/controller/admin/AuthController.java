@@ -1,5 +1,6 @@
 package com.example.mytech.controller.admin;
 
+import com.example.mytech.entity.Course;
 import com.example.mytech.entity.User;
 import com.example.mytech.exception.MessageRespone;
 import com.example.mytech.model.request.LoginRep;
@@ -16,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
@@ -54,8 +56,26 @@ public class AuthController {
                 )
         );
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = jwtUtil.generateToken((CustomUserDetails) authentication.getPrincipal());
-        return ResponseEntity.ok(new JwtAuthenticationResponse(jwt));
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        String jwt = jwtUtil.generateToken(userDetails);
+
+        List<String> roles = userDetails.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.toList());
+
+        // Lấy danh sách courseId từ người dùng
+        List<String> courseIds = userDetails.getUser().getCourses().stream()
+                .map(Course::getId)
+                .collect(Collectors.toList());
+
+        JwtResponse jwtResponse = new JwtResponse( jwt,
+                userDetails.getUser().getId(),
+                userDetails.getUser().getName(),
+                userDetails.getUser().getEmail(),
+                roles,courseIds);
+
+        return ResponseEntity.ok(jwtResponse);
+
     }
     @PostMapping("/register")
     public ResponseEntity<?> Register(@Validated @RequestBody RegisterRep rep) {

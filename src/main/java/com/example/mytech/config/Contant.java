@@ -9,6 +9,7 @@ public class Contant {
     public static final int LIMIT_COURSE = 10 ;
     public static final int LIMIT_POST = 10 ;
     public static final int LIMIT_USER = 5 ;
+    public static final int LIMIT_USERCOURSE = 5 ;
     public static final int LIMIT_TEACHER = 10 ;
 
 

@@ -324,7 +324,8 @@ public class UserServiceImpl implements UserService {
             UserCourse userCourse = new UserCourse();
             userCourse.setCourse(course);
             userCourse.setUser(user);
-            userCourse.setEnrollDate(LocalDateTime.now());
+            userCourse.setStatus(0);
+            userCourse.setEnrollDate(new Timestamp(System.currentTimeMillis()));
             userCourseRepository.save(userCourse);
         }catch (Exception e){
             throw new InternalServerException("Lỗi khi thêm khóa học") ;

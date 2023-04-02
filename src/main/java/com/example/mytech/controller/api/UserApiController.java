@@ -1,11 +1,13 @@
 package com.example.mytech.controller.api;
 
 
+import com.example.mytech.entity.Course;
 import com.example.mytech.entity.User;
 import com.example.mytech.model.request.UpdateProfileReq;
 import com.example.mytech.model.request.UserRep;
 import com.example.mytech.repository.UserRepository;
 import com.example.mytech.security.CustomUserDetails;
+import com.example.mytech.service.CourseService;
 import com.example.mytech.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +36,9 @@ public class UserApiController {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private CourseService courseService ;
+
     // get all user have role sutdent
     @GetMapping("/student")
     public List<User> getAllStudents() {
@@ -61,6 +66,7 @@ public class UserApiController {
         return ResponseEntity.ok("Cập nhật thành công");
     }
 
+    // get profile
     @GetMapping("/profile")
     public ResponseEntity<?> getUser() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -76,6 +82,7 @@ public class UserApiController {
         return  ResponseEntity.badRequest().body("Bạn cần đăng nhập để xem thông tin ");
     }
 
+    // update profile
     @PostMapping("/update-profile")
     public ResponseEntity<?> updateProfile(@Valid @RequestBody UpdateProfileReq req) {
         User user = ((CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser();
@@ -87,4 +94,9 @@ public class UserApiController {
         return ResponseEntity.ok("Cập nhật profile thành công");
     }
 
+    // get list course of user isLogined
+    @GetMapping("/course/users/{userId}")
+    public List<Course> getCourseByUserId (@PathVariable String userId) {
+        return courseService.findCoursesByUserId(userId) ;
+    }
 }

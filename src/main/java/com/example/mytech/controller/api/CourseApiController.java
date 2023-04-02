@@ -37,7 +37,7 @@ public class CourseApiController {
     }
 
     // update course api
-    @PutMapping("/api/admin/courses/update/{id}")
+    @PutMapping("/admin/courses/update/{id}")
     public ResponseEntity<?> updateCourse (@PathVariable("id") String id, @Valid @RequestBody CourseRep rep) {
         courseService.updateCourse(id, rep);
         return ResponseEntity.ok("Cập nhật thành công");
@@ -56,9 +56,16 @@ public class CourseApiController {
         return userService.findUsersWithRoleUserInCourse(courseId);
     }
 
-    // get list role_user by course id
+    // get list role_teacher by course id
     @GetMapping("/course/{id}/users/role_teacher")
     public List<User> findUsersWithRoleTeacherInCourse (@PathVariable("id") String courseId) {
         return userService.findUsersWithRoleTeacherInCourse(courseId);
+    }
+
+    // get list course by id
+    @GetMapping("/course/{id}")
+    public ResponseEntity<?> getListCourseById (@PathVariable String id){
+         Course course = courseService.getCourseById(id);
+         return ResponseEntity.ok(course);
     }
 }

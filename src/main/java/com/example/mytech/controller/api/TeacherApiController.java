@@ -41,7 +41,7 @@ public class TeacherApiController {
         return ResponseEntity.ok("Cập nhật thành công");
     }
 
-    // get list course thoe userId have role_teacher
+    // get list course theo userId have role_teacher
     @GetMapping("/users/{id}/courses")
     public List<Course> findCoursesByTeacherId (@PathVariable("id") String userId) {
         return courseService.findCoursesByTeacherId(userId);

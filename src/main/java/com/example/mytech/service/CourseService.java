@@ -32,6 +32,9 @@ public interface CourseService {
     // get list couse by userId have role_teacher
     public List<Course> findCoursesByTeacherId (String userId) ;
 
+    // get list couse by userId iddLogined
+    public List<Course> findCoursesByUserId (String userId) ;
+
     // uploadFile
     public String uploadFile(MultipartFile file) ;
 

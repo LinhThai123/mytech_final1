@@ -142,7 +142,8 @@ public class CourseServiceImpl implements CourseService {
             UserCourse userCourse = new UserCourse();
             userCourse.setCourse(course);
             userCourse.setUser(teacher);
-            userCourse.setEnrollDate(LocalDateTime.now());
+            userCourse.setEnrollDate(new Timestamp(System.currentTimeMillis()));
+            userCourse.setStatus(0);
             userCourseRepository.save(userCourse);
         } catch (Exception e) {
             throw new InternalServerException(e.getMessage());
@@ -214,6 +215,11 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public List<Course> findCoursesByTeacherId(String userId) {
         return courseRepository.findCoursesByTeacherId(userId);
+    }
+
+    @Override
+    public List<Course> findCoursesByUserId(String userId) {
+        return courseRepository.findCoursesByUserId(userId);
     }
 
     @Override

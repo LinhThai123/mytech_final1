@@ -1,11 +1,11 @@
 package com.example.mytech.controller.admin;
 
 
-import com.example.mytech.entity.Course;
 import com.example.mytech.entity.User;
 import com.example.mytech.exception.NotFoundException;
-import com.example.mytech.model.request.CourseRep;
+import com.example.mytech.model.request.ChangeStatusReq;
 import com.example.mytech.model.request.UserRep;
+import com.example.mytech.service.UserCourseService;
 import com.example.mytech.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -24,6 +24,9 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private UserCourseService userCourseService;
 
     @GetMapping("/admin/users")
     public String getListUserPage(Model model,
@@ -93,6 +96,12 @@ public class UserController {
             model.addAttribute("message", "Xóa thất bại");
             return new ModelAndView("redirect:/admin/users", model);
         }
+    }
+
+    // học viên đăng ký khóa học , được admin phê duyệt
+    @GetMapping("/admin/user-course/{id}")
+    public void updateCourseStatus(@PathVariable String id , ChangeStatusReq req) {
+        userCourseService.updateStatus(id , req);
     }
 }
 
