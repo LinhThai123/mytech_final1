@@ -1,7 +1,9 @@
 package com.example.mytech.service.impl;
 
 import com.example.mytech.config.Contant;
+import com.example.mytech.entity.User;
 import com.example.mytech.entity.UserCourse;
+import com.example.mytech.exception.NotFoundException;
 import com.example.mytech.model.request.ChangeStatusReq;
 import com.example.mytech.repository.UserCourseRepository;
 import com.example.mytech.service.UserCourseService;
@@ -13,6 +15,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.Optional;
 
 
 @Component
@@ -22,11 +25,24 @@ public class UserCourseServiceImpl implements UserCourseService {
     private UserCourseRepository userCourseRepository ;
 
     @Override
-    public void updateStatus(String id, ChangeStatusReq req) {
-        UserCourse userCourse = userCourseRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy khóa học của học viên với ID = " + id));
+    public UserCourse getUserCourseById(String id) {
+        Optional<UserCourse> rs = userCourseRepository.findById(id);
+        if (!rs.isPresent()) {
+            throw new NotFoundException("UserCourse do not exits");
+        }
+        return rs.get();
+    }
+
+    @Override
+    public UserCourse updateStatus(String id, ChangeStatusReq req) {
+        Optional<UserCourse> rs = userCourseRepository.findById(id);
+        if (!rs.isPresent()) {
+            throw new NotFoundException("UserCourse does not exist");
+        }
+        UserCourse userCourse = rs.get();
         userCourse.setStatus(req.getStatus());
         userCourseRepository.save(userCourse);
+        return userCourse;
     }
 
     @Override

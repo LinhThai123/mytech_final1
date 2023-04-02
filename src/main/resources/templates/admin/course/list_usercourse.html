@@ -296,8 +296,9 @@
                                         </thead>
                                         <tbody>
                                         <th:block th:each="usercourse : ${userCourses}">
-                                            <tr>
-                                                <td th:text="${usercourse.course.name}">
+                                            <tr data-item-id="1" th:attr="data-id = ${usercourse.id}">
+
+                                                <td th:text="${usercourse.course.name}" >
                                                 </td>
                                                 <td th:text="${usercourse.user.name}">
                                                 </td>
@@ -305,8 +306,13 @@
                                                     <span th:text="${#dates.format(usercourse.enrollDate, 'dd-MM-yyyy')}"></span>
                                                 </td>
                                                 <td>
-                                                    <a href="#" id="changeStatusLink" class="change-status-link"
-                                                       th:text="${usercourse.status == 0 ? 'Pending' : 'Active'}">
+                                                    <a href="#" id="changeStatusLink" class="change-status-link">
+                                                    <th:block th:if="${usercourse.status == 0}">
+                                                        <span>Pending</span>
+                                                    </th:block>
+                                                        <th:block th:if="${usercourse.status == 1}">
+                                                            <span>Active</span>
+                                                        </th:block>
                                                     </a>
                                                 </td>
                                             </tr>
@@ -338,9 +344,9 @@
                         <div class="modal-body">
                             <div class="form-group">
                                 <label for="status">Status</label>
-                                <select class="form-control" id="status1" name="status1">
-                                    <option th:value="0">Pending</option>
-                                    <option th:value="1">Active</option>
+                                <select class="form-control" name="status">
+                                    <option value="0">Pending</option>
+                                    <option value="1">Active</option>
                                 </select>
                             </div>
                         </div>
@@ -389,11 +395,50 @@
         pagination([[${totalPages}]], [[${currentPage}]]);
 
     });
-    $(function() {
-        $('#changeStatusLink').on('click', function(event) {
-            $('#exampleModal').modal('show');
+    $(document).on('click', '.change-status-link', function() {
+        // Lấy giá trị của id
+        var id = $(this).closest('tr').data('id');
+
+        // Hiển thị modal
+        $('#exampleModal').modal('show');
+
+        // Gắn sự kiện submit cho form
+        $('#statusForm').on('submit', function(event) {
+            // Ngăn chặn chuyển hướng trang mặc định của trình duyệt
+            event.preventDefault();
+
+            // Lấy giá trị của status
+            var status = $("select[name='status']").val();
+
+            // Tạo object dữ liệu để gửi đi
+            var data = {
+                "status": status
+            };
+
+            // Gọi ajax để gửi yêu cầu đến server
+            $.ajax({
+                url: "/" + id + "/status",
+                type: "PUT",
+                contentType: "application/json",
+                data: JSON.stringify(data),
+                success: function(response) {
+                    if (status === "0") {
+                        $('.change-status-link', $(`[data-id="${id}"]`)).find('span').text("Pending");
+                    } else if (status === "1") {
+                        $('.change-status-link', $(`[data-id="${id}"]`)).find('span').text("Active");
+                    }
+
+                    $('#exampleModal').modal('hide');
+                    toastr.success("Cập nhật thành công");
+                    location.reload();
+                },
+                error: function(xhr, status, error) {
+                    toastr.error("Cập nhật thất bại" + error);
+                }
+            });
         });
-    })
+    });
+
 </script>
 </body>
 </html>

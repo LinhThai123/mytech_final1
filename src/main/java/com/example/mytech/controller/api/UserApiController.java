@@ -99,4 +99,5 @@ public class UserApiController {
     public List<Course> getCourseByUserId (@PathVariable String userId) {
         return courseService.findCoursesByUserId(userId) ;
     }
+
 }
