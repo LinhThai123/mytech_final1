@@ -283,11 +283,11 @@
                                                 </th>
                                                 <th></th>
                                                 <th>
-                                                    <select name="status" class="form-control thuy-search-select"
-                                                            id="status">
+                                                    <select name="trangthai" class="form-control thuy-search-select"
+                                                            id="trangthai">
                                                         <option value="">Tất cả</option>
-                                                        <option value="0">Pending</option>
-                                                        <option value="1">Active</option>
+                                                        <option th:value="0">Pending</option>
+                                                        <option th:value="1">Active</option>
                                                     </select>
                                                 </th>
                                                 <input type="hidden" name="page" id="page">
@@ -306,13 +306,9 @@
                                                     <span th:text="${#dates.format(usercourse.enrollDate, 'dd-MM-yyyy')}"></span>
                                                 </td>
                                                 <td>
-                                                    <a href="#" id="changeStatusLink" class="change-status-link">
-                                                    <th:block th:if="${usercourse.status == 0}">
-                                                        <span>Pending</span>
-                                                    </th:block>
-                                                        <th:block th:if="${usercourse.status == 1}">
-                                                            <span>Active</span>
-                                                        </th:block>
+                                                    <a href="#" class="change-status-link" data-id="${usercourse.id}">
+                                                        <span th:if="${usercourse.status == 0}">Pending</span>
+                                                        <span th:if="${usercourse.status == 1}">Active</span>
                                                     </a>
                                                 </td>
                                             </tr>
@@ -343,10 +339,10 @@
                     <form id="statusForm">
                         <div class="modal-body">
                             <div class="form-group">
-                                <label for="status">Status</label>
+                                <label for="trangthai">Status</label>
                                 <select class="form-control" name="status">
-                                    <option value="0">Pending</option>
-                                    <option value="1">Active</option>
+                                    <option th:value="0">Pending</option>
+                                    <option th:value="1">Active</option>
                                 </select>
                             </div>
                         </div>
@@ -414,7 +410,6 @@
             var data = {
                 "status": status
             };
-
             // Gọi ajax để gửi yêu cầu đến server
             $.ajax({
                 url: "/" + id + "/status",
@@ -422,14 +417,10 @@
                 contentType: "application/json",
                 data: JSON.stringify(data),
                 success: function(response) {
-                    if (status === "0") {
-                        $('.change-status-link', $(`[data-id="${id}"]`)).find('span').text("Pending");
-                    } else if (status === "1") {
-                        $('.change-status-link', $(`[data-id="${id}"]`)).find('span').text("Active");
-                    }
+                    $('.change-status-link', $(`[data-id="${id}"]`)).find('span').text(response.status == 0 ? "Pending" : "Active");
 
                     $('#exampleModal').modal('hide');
-                    toastr.success("Cập nhật thành công");
+                    toastr.success("Cập nhật thành công" + response);
                     location.reload();
                 },
                 error: function(xhr, status, error) {
@@ -438,7 +429,6 @@
             });
         });
     });
-
 </script>
 </body>
 </html>
