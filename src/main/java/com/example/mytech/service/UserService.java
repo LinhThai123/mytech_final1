@@ -3,6 +3,7 @@ package com.example.mytech.service;
 
 import com.example.mytech.entity.Course;
 import com.example.mytech.entity.User;
+import com.example.mytech.model.request.ChangePassWordRep;
 import com.example.mytech.model.request.RegisterRep;
 import com.example.mytech.model.request.UpdateProfileReq;
 import com.example.mytech.model.request.UserRep;
@@ -51,5 +52,7 @@ public interface UserService {
     public List<Course> enrollCourse (String userId , String courseId) ;
 
     public byte[] readFile (String fileId) ;
+
+
 
 }

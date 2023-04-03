@@ -5,6 +5,7 @@ import com.example.mytech.entity.*;
 import com.example.mytech.exception.BadRequestException;
 import com.example.mytech.exception.InternalServerException;
 import com.example.mytech.exception.NotFoundException;
+import com.example.mytech.model.request.ChangePassWordRep;
 import com.example.mytech.model.request.RegisterRep;
 import com.example.mytech.model.request.UpdateProfileReq;
 import com.example.mytech.model.request.UserRep;
@@ -21,6 +22,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -337,5 +339,6 @@ public class UserServiceImpl implements UserService {
     public byte[] readFile(String fileId) {
         return imageService.readFile(fileId);
     }
+
 
 }

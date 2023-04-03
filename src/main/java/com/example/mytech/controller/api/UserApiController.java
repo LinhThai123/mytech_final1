@@ -3,12 +3,16 @@ package com.example.mytech.controller.api;
 
 import com.example.mytech.entity.Course;
 import com.example.mytech.entity.User;
+import com.example.mytech.model.request.ChangePassWordRep;
 import com.example.mytech.model.request.UpdateProfileReq;
 import com.example.mytech.model.request.UserRep;
 import com.example.mytech.repository.UserRepository;
 import com.example.mytech.security.CustomUserDetails;
+import com.example.mytech.security.JwtTokenUtil;
+import com.example.mytech.service.ChangePassWordService;
 import com.example.mytech.service.CourseService;
 import com.example.mytech.service.UserService;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.socket.WebSocketHandler;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.sql.Timestamp;
 import java.util.List;
@@ -38,6 +43,12 @@ public class UserApiController {
 
     @Autowired
     private CourseService courseService ;
+
+    @Autowired
+    private JwtTokenUtil jwtTokenUtil;
+
+    @Autowired
+    private ChangePassWordService changePassWordService ;
 
     // get all user have role sutdent
     @GetMapping("/student")
@@ -98,6 +109,15 @@ public class UserApiController {
     @GetMapping("/course/users/{userId}")
     public List<Course> getCourseByUserId (@PathVariable String userId) {
         return courseService.findCoursesByUserId(userId) ;
+    }
+
+    // thay đổi password
+    @SneakyThrows
+    @PostMapping("/change-password")
+    public ResponseEntity<?> changePassword(HttpServletRequest request, @RequestBody ChangePassWordRep rep) {
+        String email = jwtTokenUtil.getEmailFromToken(request.getHeader("Authorization").substring(7));
+        changePassWordService.changePassWord(email, rep);
+        return ResponseEntity.ok().body("Password changed successfully.");
     }
 
 }
