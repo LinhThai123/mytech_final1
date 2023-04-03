@@ -4,9 +4,8 @@ import com.example.mytech.entity.User;
 import com.example.mytech.model.request.ChangePassWordRep;
 import com.example.mytech.repository.UserRepository;
 import com.example.mytech.service.ChangePassWordService;
+import com.example.mytech.service.MailService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -18,7 +17,7 @@ public class ChangePassWordServiceImpl implements ChangePassWordService {
     private UserRepository userRepository;
 
     @Autowired
-    private JavaMailSender javaMailSender;
+    private MailService mailService ;
 
     @Override
     public void changePassWord(String email, ChangePassWordRep rep) throws Exception {
@@ -39,15 +38,7 @@ public class ChangePassWordServiceImpl implements ChangePassWordService {
         user.setPassword(passwordEncoder().encode(rep.getNewpassword()));
         userRepository.save(user);
 
-        sendEmail(user.getEmail(), "Password Changed", "Your password has been changed successfully.");
-    }
-
-    private void sendEmail(String toEmail, String subject, String body) {
-        SimpleMailMessage mail = new SimpleMailMessage();
-        mail.setTo(toEmail);
-        mail.setSubject(subject);
-        mail.setText(body);
-        javaMailSender.send(mail);
+        mailService.sendEmail(user.getEmail(), "Password Changed", "Your password has been changed successfully.");
     }
 
     private PasswordEncoder passwordEncoder() {

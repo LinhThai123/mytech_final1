@@ -9,11 +9,10 @@ import com.example.mytech.model.request.UserRep;
 import com.example.mytech.repository.UserRepository;
 import com.example.mytech.security.CustomUserDetails;
 import com.example.mytech.security.JwtTokenUtil;
-import com.example.mytech.service.ChangePassWordService;
-import com.example.mytech.service.CourseService;
-import com.example.mytech.service.UserService;
+import com.example.mytech.service.*;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -49,6 +48,12 @@ public class UserApiController {
 
     @Autowired
     private ChangePassWordService changePassWordService ;
+
+    @Autowired
+    private ForgotPassWordService forgotPassWordService ;
+
+    @Autowired
+    private MailService mailService ;
 
     // get all user have role sutdent
     @GetMapping("/student")
@@ -120,4 +125,23 @@ public class UserApiController {
         return ResponseEntity.ok().body("Password changed successfully.");
     }
 
+    // quên mật khẩu
+    @PostMapping("/forgot-password")
+    public ResponseEntity<?> processForgotPassword(@RequestParam("email") String email) {
+
+        User user = userRepository.findByEmail(email);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Email not found");
+        }
+
+        String newPassword = forgotPassWordService.generateNewPassword();
+        user.setPassword(newPassword);
+        userRepository.save(user);
+
+        String subject = "Password Reset";
+        String message = "Your new password is: " + newPassword;
+        mailService.sendEmail(user.getEmail(), subject, message);
+
+        return ResponseEntity.ok("Password reset email sent");
+    }
 }
