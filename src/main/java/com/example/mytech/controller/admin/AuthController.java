@@ -2,6 +2,7 @@ package com.example.mytech.controller.admin;
 
 import com.example.mytech.entity.Course;
 import com.example.mytech.entity.User;
+import com.example.mytech.entity.UserCourse;
 import com.example.mytech.exception.MessageRespone;
 import com.example.mytech.model.request.LoginRep;
 import com.example.mytech.model.request.RegisterRep;
@@ -63,16 +64,15 @@ public class AuthController {
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
 
-        // Lấy danh sách courseId từ người dùng
-        List<String> courseIds = userDetails.getUser().getCourses().stream()
-                .map(Course::getId)
-                .collect(Collectors.toList());
+        // Lấy danh sách UserCourse
+        List<UserCourse> courseLists = userDetails.getUser().getUserCoursesList();
 
         JwtResponse jwtResponse = new JwtResponse( jwt,
                 userDetails.getUser().getId(),
                 userDetails.getUser().getName(),
                 userDetails.getUser().getEmail(),
-                roles,courseIds);
+                roles,
+                courseLists); // Thêm vào đây
 
         return ResponseEntity.ok(jwtResponse);
 

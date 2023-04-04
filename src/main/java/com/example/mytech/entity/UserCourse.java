@@ -39,4 +39,8 @@ public class UserCourse {
     @Column(name = "status" ,columnDefinition = "TINYINT(0)")
     private int status;
 
+    public String getCourseId() {
+        return this.course.getId();
+    }
+
 }

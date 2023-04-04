@@ -11,10 +11,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.time.LocalDate;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Getter
 @Setter
@@ -88,4 +85,11 @@ public class User {
         this.password = password;
     }
 
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Set<UserCourse> userCourses = new HashSet<>();
+
+    public List<UserCourse> getUserCoursesList() {
+        return new ArrayList<>(this.userCourses);
+    }
 }

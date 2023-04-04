@@ -1,10 +1,7 @@
 package com.example.mytech.service.impl;
 
 import com.example.mytech.config.Contant;
-import com.example.mytech.entity.Category;
-import com.example.mytech.entity.Course;
-import com.example.mytech.entity.User;
-import com.example.mytech.entity.UserCourse;
+import com.example.mytech.entity.*;
 import com.example.mytech.exception.BadRequestException;
 import com.example.mytech.exception.InternalServerException;
 import com.example.mytech.exception.NotFoundException;
@@ -145,6 +142,7 @@ public class CourseServiceImpl implements CourseService {
             userCourse.setEnrollDate(new Timestamp(System.currentTimeMillis()));
             userCourse.setStatus(0);
             userCourseRepository.save(userCourse);
+
         } catch (Exception e) {
             throw new InternalServerException(e.getMessage());
         }

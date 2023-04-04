@@ -11,9 +11,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.time.LocalDate;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Getter
 @Setter
@@ -62,7 +60,6 @@ public class Course {
     @Column (name = "published_at")
     private Timestamp publishedAt;
 
-
     @Column(name = "expired_at")
     private Date expiredAt;
 
@@ -75,11 +72,13 @@ public class Course {
     @JsonIgnore
     private Set<User> users = new HashSet<>();
 
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Schedule> schedules = new ArrayList<>();
+
     @PreRemove
     public void remove() {
         for (User user : users) {
             user.getCourses().remove(this);
         }
     }
-
 }
