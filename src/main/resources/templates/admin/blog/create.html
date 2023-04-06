@@ -91,47 +91,55 @@
                         </a>
                     </li>
                     <li class="nav-item has-treeview">
-                        <a href="/admin/orders" class="nav-link">
-                            <i class="nav-icon fas fa-shopping-cart"></i>
+                        <a href="/admin/categories" class="nav-link">
+                            <i class="nav-icon fas fa-layer-group"></i>
                             <p>
-                                Quản lý đơn hàng
+                                Quản lý category
+                            </p>
+                        </a>
+                    </li>
+                    <li class="nav-item has-treeview">
+                        <a href="/admin/users" class="nav-link">
+                            <i class="nav-icon fas fa-user-graduate"></i>
+                            <p>
+                                Quản lý Học Viên
                                 <i class="fas fa-angle-left right"></i>
                             </p>
                         </a>
                         <ul class="nav nav-treeview">
                             <li class="nav-item">
-                                <a href="/admin/orders" class="nav-link">
+                                <a href="/admin/users" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
-                                    <p>Danh sách đơn hàng</p>
+                                    <p>Danh sách học viên</p>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="/admin/orders/create" class="nav-link">
+                                <a href="/admin/students/create" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
-                                    <p>Tạo đơn hàng</p>
+                                    <p>Tạo học viên</p>
                                 </a>
                             </li>
                         </ul>
                     </li>
                     <li class="nav-item has-treeview">
-                        <a href="/admin/products" class="nav-link">
-                            <i class="nav-icon fas fa-star"></i>
-                            <p>
-                                Quản lý sản phẩm
+                        <a href="/admin/teachers" class="nav-link">
+                            <i class="fas fa-chalkboard-teacher" style="margin-left: 5px"></i>
+                            <p style="margin-left: 8px">
+                                Quản lý Giảng Viên
                                 <i class="fas fa-angle-left right"></i>
                             </p>
                         </a>
                         <ul class="nav nav-treeview">
                             <li class="nav-item">
-                                <a href="/admin/products" class="nav-link">
+                                <a href="/admin/teachers" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
-                                    <p>Danh sách sản phẩm</p>
+                                    <p>Danh sách giảng viên</p>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="/admin/products/create" class="nav-link">
+                                <a href="/admin/teachers/create" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
-                                    <p>Thêm mới sản phẩm</p>
+                                    <p>Tạo giảng viên</p>
                                 </a>
                             </li>
                         </ul>
@@ -160,20 +168,50 @@
                         </ul>
                     </li>
                     <li class="nav-item has-treeview">
-                        <a href="/admin/brands" class="nav-link">
-                            <i class='nav-icon fab fa-centos'></i>
-                            <p>
-                                Quản lý nhãn hiệu
+                        <a href="/admin/courses" class="nav-link">
+                            <i class="fab fa-discourse" style="margin-left: 5px"></i>
+                            <p style="margin-left: 8px">
+                                Quản Lý Khóa Học
+                                <i class="fas fa-angle-left right"></i>
                             </p>
                         </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="/admin/courses" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Danh sách khóa học</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/admin/courses/create" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Tạo khóa học</p>
+                                </a>
+                            </li>
+                        </ul>
                     </li>
                     <li class="nav-item has-treeview">
-                        <a href="/admin/categories" class="nav-link">
-                            <i class="nav-icon fas fa-layer-group"></i>
-                            <p>
-                                Quản lý category
+                        <a href="/admin/schedules" class="nav-link">
+                            <i class="fas fa-calendar-alt" style="margin-left: 5px"></i>
+                            <p style="margin-left: 8px">
+                                Quản Lý Lịch Học
+                                <i class="fas fa-angle-left right"></i>
                             </p>
                         </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="/admin/schedules" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Danh sách lịch học</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/admin/schedules/create" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Tạo lịch học</p>
+                                </a>
+                            </li>
+                        </ul>
                     </li>
                     <li class="nav-item has-treeview">
                         <a href="/admin/posts" class="nav-link">
@@ -199,27 +237,10 @@
                         </ul>
                     </li>
                     <li class="nav-item has-treeview">
-                        <a href="/admin/users" class="nav-link">
-                            <i class="nav-icon fas fa-users"></i>
-                            <p>
-                                Quản lý user
-                                <i class="fas fa-angle-left right"></i>
-                            </p>
+                        <a href="/admin/user_courses" class="nav-link">
+                            <i class="fas fa-thumbs-up" style="margin-left: 5px"></i>
+                            <p style="margin-left: 7px;">Duyệt khóa học</p>
                         </a>
-                        <ul class="nav nav-treeview">
-                            <li class="nav-item">
-                                <a href="/admin/posts" class="nav-link">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Danh sách user</p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="/admin/posts/create" class="nav-link">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Tạo bài user</p>
-                                </a>
-                            </li>
-                        </ul>
                     </li>
                     <li class="nav-item has-treeview">
                         <a href="/admin/config" class="nav-link">

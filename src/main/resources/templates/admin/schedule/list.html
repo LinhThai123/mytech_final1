@@ -6,7 +6,7 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <link rel="icon" th:href="@{/image/favicon.ico}" type="image/x-icon"/>
     <link rel="shortcut icon" th:href="@{/image/favicon.ico}" type="image/x-icon"/>
-    <title>Danh sách danh mục</title>
+    <title>Danh sách lịch học</title>
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" th:href="@{/adminlte/plugins/fontawesome-free/css/all.min.css}">
     <!-- overlayScrollbars -->
@@ -287,17 +287,15 @@
                                         <thead>
                                         <tr class="heading">
                                             <th width="55%">
-                                                Danh mục
+                                                Tên Khóa Học
                                             </th>
-<!--                                            <th width="15%">-->
-<!--                                                Số lượng sản phẩm-->
-<!--                                            </th>-->
                                             <th> Chức năng</th>
                                         </tr>
                                         <tr>
                                             <form method="GET" id="search-form">
+                                                <input type="hidden" name="id" id="id">
                                                 <th>
-                                                    <input type="text" name="name" id="name" class="form-control search-input">
+                                                    <input type="text" name="nameCourse" id="nameCourse" class="form-control search-input">
                                                 </th>
                                                 <th></th>
                                                 <input type="hidden" name="page" id="page">
@@ -305,19 +303,17 @@
                                         </tr>
                                         </thead>
                                         <tbody class="list-category">
-                                        <th:block th:each="category : ${categories}">
-                                            <tr data-item-id="1" th:attr="data-id = ${category.id}">
+                                        <th:block th:each="schedule : ${schedules}">
+                                            <tr data-item-id="1" th:attr="data-id = ${schedule.id}">
 
-                                                <td class="category-name" th:data-id="${category.id}"
-                                                    th:text="${category.name}"></td>
-
-<!--                                                <td th:text="${category.courseCount}"></td>-->
+                                                <td class="schedule-name" th:data-id="${schedule.id}"
+                                                    th:text="${schedule.course.name}"></td>
                                                 <td>
                                                     <button class="btn" onclick="updateCategory(this)"
-                                                            th:data-id="${category.id}"><i class="fas fa-edit"></i>
+                                                            th:data-id="${schedule.id}"><i class="fas fa-edit"></i>
                                                     </button>
                                                     <button class="btn" onclick="deleteCategory(this)"
-                                                            th:data-id="${category.id}"><i class="fas fa-trash-alt"></i>
+                                                            th:data-id="${schedule.id}"><i class="fas fa-trash-alt"></i>
                                                     </button>
                                                 </td>
                                             </tr>
@@ -334,7 +330,7 @@
                     </div>
                 </div>
 
-                <!-- Modal add new category-->
+                <!-- Modal add new schedule-->
                 <div class="modal fade" id="modal-add-new-category" tabindex="-1" role="dialog"
                      aria-labelledby="modalAddNewCategory" aria-hidden="true">
                     <div class="modal-dialog" role="document">
@@ -358,7 +354,7 @@
                     </div>
                 </div>
 
-                <!-- Modal update category-->
+                <!-- Modal update schedule-->
                 <div class="modal fade" id="modal-update-category" tabindex="-1" role="dialog"
                      aria-labelledby="modalUpdateCategory" aria-hidden="true">
                     <div class="modal-dialog" role="document">
@@ -383,7 +379,7 @@
                     </div>
                 </div>
 
-                <!-- Modal delete category-->
+                <!-- Modal delete schedule-->
                 <div class="modal fade" id="modal-delete-category" tabindex="-1" role="dialog"
                      aria-labelledby="modalDeleteCategory" aria-hidden="true">
                     <div class="modal-dialog" role="document">
@@ -433,116 +429,15 @@
 <script th:inline="javascript">
     $(function () {
         let vars = parseUrl();
+        id =  vars["id"] || ""
         name = vars["name"] || ""
         page = vars["page"] || "0"
 
-        $('#name').val(name)
+        $('#id').val(id)
+        $('#nameCourse').val(name)
         $('#page').val(page)
-
         pagination([[${totalPages}]], [[${currentPage}]])
     });
-    $('.btn-add-new-category').click(function () {
-        let newCategory = $('#new-category').val();
-        if (newCategory.length == 0) {
-            $('#invalid-feedback-new-category').show();
-            return;
-        }
-        req = {
-            name: newCategory
-        }
-        var myJSON = JSON.stringify(req);
-        $.ajax({
-            url: '/api/admin/categories',
-            type: 'POST',
-            data: myJSON,
-            contentType: "application/json; charset=utf-8",
-            success: function (data) {
-                toastr.success("Tạo category thành công");
-                $('.list-category').append(`
-                        <tr>
-                            <td class="category-name" data-id="${data.id}">${data.name}</td>
-<!--                            <td>0</td>-->
-                            <td>
-                                <button class="btn" onclick="updateCategory(this)" data-id="${data.id}"><i class="fas fa-edit"></i></button>
-                                <button class="btn" onclick="deleteCategory(this)" data-id="${data.id}"><i class="fas fa-trash-alt"></i></button>
-                            </td>
-                        </tr>
-                    `);
-                $('.modal').modal('hide');
-                $('#new-category').val('');
-            },
-            error: function (data) {
-                toastr.warning(data.responseJSON.message);
-            },
-            complete: function () {
-                $('#invalid-feedback-new-category').hide();
-            }
-        });
-    })
-
-    function updateCategory(btn) {
-        let id = $(btn).data('id');
-        let name = $('.category-name[data-id=' + id + ']').text();
-        $('#update-category').val(name);
-        $('#update-category-id').val(id);
-        $('#modal-update-category').modal('show');
-    }
-
-    $('.btn-update-category').click(function () {
-        let updateCategory = $('#update-category').val().trim().replace(/\s+/g, ' ');
-        let idCategory = $('#update-category-id').val();
-        if (updateCategory.length == 0) {
-            $('#invalid-feedback-update-category').show();
-            return;
-        }
-        req = {
-            name: updateCategory
-        }
-        var myJSON = JSON.stringify(req);
-        $.ajax({
-            url: '/api/admin/categories/' + idCategory,
-            type: 'PUT',
-            data: myJSON,
-            contentType: "application/json; charset=utf-8",
-            success: function (data) {
-                toastr.success("Cập nhật thành công");
-                $('.category-name[data-id=' + idCategory + ']').text(updateCategory);
-                $('.modal').modal('hide');
-                $('#update-category').val('');
-                $('#update-category-id').val('');
-            },
-            error: function (data) {
-                toastr.warning(data.responseJSON.message);
-            },
-            complete: function () {
-                $('#invalid-feedback-update-category').hide();
-            }
-        });
-    })
-
-    function deleteCategory(btn) {
-        let id = $(btn).data('id');
-        $('#delete-category-id').val(id);
-        $('#modal-delete-category').modal('show');
-    }
-
-    $('.btn-delete-category').click(function () {
-        let idCategory = $('#delete-category-id').val();
-        $.ajax({
-            url: '/api/admin/categories/' + idCategory,
-            type: 'DELETE',
-            contentType: "application/json; charset=utf-8",
-            success: function (data) {
-                toastr.success("Xóa thành công");
-                $('.category-name[data-id=' + idCategory + ']').parent().remove();
-                $('.modal').modal('hide');
-                $('#delete-category-id').val('');
-            },
-            error: function (data) {
-                toastr.warning(data.responseJSON.message);
-            }
-        });
-    })
 </script>
 </body>
 </html>

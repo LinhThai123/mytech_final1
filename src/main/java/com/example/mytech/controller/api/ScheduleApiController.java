@@ -1,6 +1,5 @@
 package com.example.mytech.controller.api;
 
-import com.example.mytech.entity.Course;
 import com.example.mytech.entity.Schedule;
 import com.example.mytech.model.request.ScheduleReq;
 import com.example.mytech.service.ScheduleService;

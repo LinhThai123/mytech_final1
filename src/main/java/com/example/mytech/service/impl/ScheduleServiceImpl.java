@@ -1,6 +1,7 @@
 package com.example.mytech.service.impl;
 
 
+import com.example.mytech.config.Contant;
 import com.example.mytech.entity.Course;
 import com.example.mytech.entity.Day;
 import com.example.mytech.entity.Schedule;
@@ -11,6 +12,10 @@ import com.example.mytech.repository.CourseRepository;
 import com.example.mytech.repository.ScheduleRepository;
 import com.example.mytech.service.ScheduleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
@@ -23,6 +28,16 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     @Autowired
     private CourseRepository courseRepository ;
+
+    @Override
+    public Page<Schedule> findScheduleByCourse_NameContaining(String id, String nameCourse, Integer page) {
+        page--;
+        if (page < 0) {
+            page = 0;
+        }
+        Pageable pageable = PageRequest.of(page, Contant.LIMIT_COURSE);
+        return scheduleRepository.findScheduleByIdOrCourse_NameContaining(id,nameCourse,pageable);
+    }
 
     @Override
     public Schedule createSchedule(String courseId ,ScheduleReq req) {
