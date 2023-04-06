@@ -1,15 +1,13 @@
 package com.example.mytech.controller.api;
 
+import com.example.mytech.entity.Course;
 import com.example.mytech.entity.Schedule;
 import com.example.mytech.model.request.ScheduleReq;
 import com.example.mytech.service.ScheduleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 public class ScheduleApiController {
@@ -27,5 +25,12 @@ public class ScheduleApiController {
     public ResponseEntity<?> updateSchedule (@PathVariable String id , @RequestBody ScheduleReq req) {
         scheduleService.updateSchedule(id, req);
         return ResponseEntity.ok("Cập nhật lịch học thành công");
+    }
+
+    // delete schedule api
+    @DeleteMapping("/delete/schedule/{id}")
+    public ResponseEntity<?> deleteCourse (@PathVariable("id") String id) {
+        scheduleService.deleteSchedule(id);
+        return ResponseEntity.ok("Xóa thàng công");
     }
 }

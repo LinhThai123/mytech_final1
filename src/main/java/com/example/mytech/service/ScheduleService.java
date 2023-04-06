@@ -10,4 +10,6 @@ public interface ScheduleService {
     public Schedule createSchedule (String courseId , ScheduleReq req) ;
 
     public Schedule updateSchedule (String id, ScheduleReq req) ;
+
+    public void deleteSchedule (String id) ;
 }

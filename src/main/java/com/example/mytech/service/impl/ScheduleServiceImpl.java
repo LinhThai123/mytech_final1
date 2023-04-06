@@ -15,7 +15,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
-
 @Component
 public class ScheduleServiceImpl implements ScheduleService {
 
@@ -70,5 +69,14 @@ public class ScheduleServiceImpl implements ScheduleService {
             throw new InternalServerException("Cập nhật lịch học cho khóa học thất bại ");
         }
         return schedule;
+    }
+
+    @Override
+    public void deleteSchedule(String id) {
+        Optional<Schedule> rs = scheduleRepository.findById(id) ;
+        if(!rs.isPresent()) {
+            throw new NotFoundException("Không tìm thấy lịch học có " + id) ;
+        }
+        scheduleRepository.deleteById(id);
     }
 }
