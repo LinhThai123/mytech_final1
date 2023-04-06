@@ -7,6 +7,7 @@ import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.time.LocalTime;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -21,9 +22,9 @@ public class Schedule {
     @GeneratedValue(generator = "random_id")
     private String id;
 
-    @Column(name = "day_of_week", nullable = false)
+    @Column(name = "day_of_week" , nullable = false)
     @Enumerated(EnumType.STRING)
-    private DayOfWeek dayOfWeek;
+    private Day dayOfWeek;
 
     @Column(name = "start_time", nullable = false)
     private String startTime;
@@ -31,7 +32,8 @@ public class Schedule {
     @Column(name = "end_time", nullable = false)
     private String endTime;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "course_id", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "course_id")
     private Course course;
+
 }

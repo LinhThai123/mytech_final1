@@ -17,10 +17,10 @@ public class ChangePassWordRep {
     private String oldpassword ;
 
     @NotBlank(message = "Nhập mật khẩu mới ")
-    @Size(min = 4, max = 20, message = "Mật khẩu phải chứa từ 4 - 20 ký tự")
+    @Size(min = 4, max = 50, message = "Mật khẩu phải chứa từ 4 - 50 ký tự")
     private String newpassword ;
 
     @NotBlank(message = "Nhập lại mật khẩu cũ  ")
-    @Size(min = 4, max = 20, message = "Mật khẩu phải chứa từ 4 - 20 ký tự")
+    @Size(min = 4, max = 50, message = "Mật khẩu phải chứa từ 4 - 50 ký tự")
     private String retypepassword ;
 }

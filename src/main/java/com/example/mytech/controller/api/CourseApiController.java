@@ -1,9 +1,12 @@
 package com.example.mytech.controller.api;
 
 import com.example.mytech.entity.Course;
+import com.example.mytech.entity.Schedule;
 import com.example.mytech.entity.User;
 import com.example.mytech.model.request.CourseRep;
+import com.example.mytech.model.request.ScheduleReq;
 import com.example.mytech.service.CourseService;
+import com.example.mytech.service.ScheduleService;
 import com.example.mytech.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +25,9 @@ public class CourseApiController {
     @Autowired
     private UserService userService ;
 
+    @Autowired
+    private ScheduleService scheduleService;
+
     //get list course
     @GetMapping ("/admin/course/list")
     public ResponseEntity<Object> getListCourse () {
@@ -31,7 +37,7 @@ public class CourseApiController {
 
     //add course api
     @PostMapping("/admin/courses")
-    public ResponseEntity<?> createCourse(@Valid @RequestBody CourseRep req ) {
+    public ResponseEntity<?> createCourse(@Valid @RequestBody CourseRep req) {
         Course course = courseService.createCourse(req);
         return ResponseEntity.ok(course);
     }
@@ -68,4 +74,5 @@ public class CourseApiController {
          Course course = courseService.getCourseById(id);
          return ResponseEntity.ok(course);
     }
+
 }

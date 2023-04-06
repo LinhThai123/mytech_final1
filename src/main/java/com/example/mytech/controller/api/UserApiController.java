@@ -18,6 +18,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -51,6 +52,9 @@ public class UserApiController {
 
     @Autowired
     private ForgotPassWordService forgotPassWordService ;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder ;
 
     @Autowired
     private MailService mailService ;
@@ -135,12 +139,14 @@ public class UserApiController {
         }
 
         String newPassword = forgotPassWordService.generateNewPassword();
-        user.setPassword(newPassword);
-        userRepository.save(user);
 
         String subject = "Password Reset";
         String message = "Your new password is: " + newPassword;
         mailService.sendEmail(user.getEmail(), subject, message);
+
+        user.setPassword(passwordEncoder.encode(newPassword));
+
+        userRepository.save(user);
 
         return ResponseEntity.ok("Password reset email sent");
     }

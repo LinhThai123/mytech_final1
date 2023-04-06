@@ -4,6 +4,7 @@ import com.example.mytech.entity.Course;
 import com.example.mytech.exception.NotFoundException;
 import com.example.mytech.model.request.CategoryRep;
 import com.example.mytech.model.request.CourseRep;
+import com.example.mytech.model.request.ScheduleReq;
 import com.example.mytech.model.request.UserRep;
 import com.example.mytech.service.CategoryService;
 import com.example.mytech.service.CourseService;
@@ -78,7 +79,7 @@ public class CourseController {
 
     // Go to more courses page
     @GetMapping("/courses/create")
-    public String getCourseCreatePage(Model model, CourseRep rep) {
+    public String getCourseCreatePage(Model model, CourseRep rep ) {
         model.addAttribute("course", rep);
         return "admin/course/create";
     }

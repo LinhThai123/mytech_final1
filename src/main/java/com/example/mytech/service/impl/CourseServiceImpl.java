@@ -6,9 +6,10 @@ import com.example.mytech.exception.BadRequestException;
 import com.example.mytech.exception.InternalServerException;
 import com.example.mytech.exception.NotFoundException;
 import com.example.mytech.model.request.CourseRep;
+import com.example.mytech.model.request.ScheduleReq;
 import com.example.mytech.repository.CourseRepository;
+import com.example.mytech.repository.ScheduleRepository;
 import com.example.mytech.repository.UserCourseRepository;
-import com.example.mytech.repository.UserRepository;
 import com.example.mytech.service.*;
 import com.github.slugify.Slugify;
 import lombok.SneakyThrows;
@@ -22,13 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Component
 public class CourseServiceImpl implements CourseService {
@@ -47,6 +42,12 @@ public class CourseServiceImpl implements CourseService {
 
     @Autowired
     private UserCourseRepository userCourseRepository;
+
+    @Autowired
+    private ScheduleService scheduleService;
+
+    @Autowired
+    private ScheduleRepository scheduleRepository;
 
     @Override
     public List<Course> getListCourse() {
@@ -87,6 +88,7 @@ public class CourseServiceImpl implements CourseService {
         }
 
         course.setExpiredAt(dateformater);
+
         //check exits name
         if (courseRepository.existsByName(rep.getName())) {
             throw new BadRequestException("Tên khóa học đã tồn tại");
@@ -136,6 +138,7 @@ public class CourseServiceImpl implements CourseService {
 
         try {
             courseRepository.save(course);
+
             UserCourse userCourse = new UserCourse();
             userCourse.setCourse(course);
             userCourse.setUser(teacher);
@@ -144,7 +147,7 @@ public class CourseServiceImpl implements CourseService {
             userCourseRepository.save(userCourse);
 
         } catch (Exception e) {
-            throw new InternalServerException(e.getMessage());
+            throw new InternalServerException("Lỗi khi thêm khóa học");
         }
         return course;
     }

@@ -3,6 +3,7 @@ package com.example.mytech.service;
 import com.example.mytech.entity.Course;
 import com.example.mytech.entity.User;
 import com.example.mytech.model.request.CourseRep;
+import com.example.mytech.model.request.ScheduleReq;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;

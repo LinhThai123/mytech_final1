@@ -31,7 +31,7 @@ public class UserRep {
     private String email;
 
     @NotBlank(message = "Mật khẩu trống")
-    @Size(min = 6,max = 20, message = "Mật khẩu phải chứa từ 6-20 ký tự")
+    @Size(min = 6,max = 50, message = "Mật khẩu phải chứa từ 6-20 ký tự")
     private String password;
 
     @Pattern(regexp="(84|0[3|5|7|8|9])+([0-9]{8})\\b",message = "Số điện thoại không hợp lệ!")

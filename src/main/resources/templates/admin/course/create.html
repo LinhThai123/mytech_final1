@@ -263,7 +263,8 @@
                                     <div class="row">
                                         <div class="col-lg-9 col-md-8">
                                             <div class="form-group">
-                                                <input type="hidden" class="form-control" id="id" name="id" th:field="*{id}">
+                                                <input type="hidden" class="form-control" id="id" name="id"
+                                                       th:field="*{id}">
                                                 <div>
                                                     <label class="required-label">Tên khóa học</label>
                                                     <span class="text-danger" th:if="${#fields.hasErrors('name')}"
@@ -278,7 +279,8 @@
                                                     <span class="text-danger" th:if="${#fields.hasErrors('expiredAt')}"
                                                           th:errors="*{expiredAt}">EndAt Error</span>
                                                 </div>
-                                                <input type="date" class="form-control" id="expired-date" name="expired-date"
+                                                <input type="date" class="form-control" id="expired-date"
+                                                       name="expired-date"
                                                        th:field="*{expiredAt}">
                                             </div>
                                             <div class="form-group">
@@ -299,6 +301,10 @@
                                                 <textarea class="textarea" id="description"
                                                           name="description" th:field="*{description}"></textarea>
                                             </div>
+                                            <button type="button" class="btn btn-info" data-toggle="modal"
+                                                    id="btn-schedule" data-target="#addScheduleModal">
+                                                Thêm thời khóa biểu
+                                            </button>
                                         </div>
                                         <div class="col-lg-3 col-md-4">
                                             <div class="form-group">
@@ -338,7 +344,8 @@
                                             </div>
                                             <div class="form-group">
                                                 <div>
-                                                    <label for="select_teacher" class="required-label">Giảng Viên</label>
+                                                    <label for="select_teacher" class="required-label">Giảng
+                                                        Viên</label>
                                                     <span class="text-danger"
                                                           th:if="${#fields.hasErrors('teacher_id')}"
                                                           th:errors="*{teacher_id}"> Teacher_id Error
@@ -375,7 +382,8 @@
                                                              alt="Thumbnail product">
                                                     </div>
                                                 </div>
-                                                <button type="button" class="btn btn-info" id="btn-upload-image" data-toggle="modal"
+                                                <button type="button" class="btn btn-info" id="btn-upload-image"
+                                                        data-toggle="modal"
                                                         data-target="#choose-img-modal">
                                                     Chọn ảnh
                                                 </button>
@@ -404,15 +412,15 @@
                         <div>
                             <div class="float-left">
                                 <form id="upload-images" enctype="multipart/form-data" method="post">
-                                    <input type="file"  name="file" id="upload-thumbnail">
+                                    <input type="file" name="file" id="upload-thumbnail">
                                 </form>
                                 <label for="upload-thumbnail">
                                     <span class="btn btn-warning"><i class="fas fa-upload"></i> Tải ảnh lên</span>
                                 </label>
-                                <button class="btn btn-success btn-choose-img" >Chọn ảnh</button>
+                                <button class="btn btn-success btn-choose-img">Chọn ảnh</button>
                             </div>
                             <div class="float-right">
-                                <button class="btn btn-danger btn-delete-img" ><i class="fas fa-trash-alt"></i>
+                                <button class="btn btn-danger btn-delete-img"><i class="fas fa-trash-alt"></i>
                                     Xóa ảnh
                                 </button>
                             </div>
@@ -424,6 +432,94 @@
                             </ul>
                             <ul class="pagination" id="pagination"></ul>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="scheduleModal" tabindex="-1" role="dialog" aria-labelledby="scheduleModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="scheduleModalLabel">Thêm thời khóa biểu</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Thêm các input để chọn thời khóa biểu tại đây -->
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="days" value="Monday"
+                                           id="Monday">
+                                    <label class="form-check-label" for="Monday">
+                                        Thứ Hai
+                                    </label>
+                                </div>
+
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="days" value="Wednesday"
+                                           id="Wednesday">
+                                    <label class="form-check-label" for="Wednesday">
+                                        Thứ Tư
+                                    </label>
+                                </div>
+
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="days" value="Friday"
+                                           id="Friday">
+                                    <label class="form-check-label" for="Friday">
+                                        Thứ Sáu
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6">
+
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="days" value="Tueday"
+                                           id="Tueday">
+                                    <label class="form-check-label" for="Tueday">
+                                        Thứ Ba
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="days" value="Thurday"
+                                           id="Thurday">
+                                    <label class="form-check-label" for="Thurday">
+                                        Thứ Năm
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="days" value="Saturday"
+                                           id="Saturday">
+                                    <label class="form-check-label" for="Saturday">
+                                        Thứ Bảy
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="days" value="Sunday"
+                                           id="Sunday">
+                                    <label class="form-check-label" for="Sunday">
+                                        Chủ Nhật
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="start_time">Thời gian bắt đầu:</label>
+                            <input type="time" class="form-control" id="start_time" name="start_time" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="end_time">Thời gian kết thúc:</label>
+                            <input type="time" class="form-control" id="end_time" name="end_time" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                        <button type="button" class="btn btn-primary" id="addScheduleBtn">Thêm</button>
                     </div>
                 </div>
             </div>
@@ -465,14 +561,20 @@
     $(function () {
         $('#description').summernote(
             {
-                height: 360,
+                height: 295,
                 focus: true
             }
         )
     })
-    $(document).ready(function(){
-        $("#btn-delete").click(function(){
+    $(document).ready(function () {
+        $("#btn-delete").click(function () {
             $("#modal-delete-course").modal('show');
+        });
+    });
+
+    $(document).ready(function () {
+        $("#btn-schedule").click(function () {
+            $("#scheduleModal").modal('show');
         });
     });
 </script>

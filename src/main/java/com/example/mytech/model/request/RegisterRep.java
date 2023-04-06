@@ -26,7 +26,7 @@ public class RegisterRep {
     private String email  ;
 
     @NotBlank(message = "Mật khẩu trống")
-    @Size(min = 6,max = 20, message = "Mật khẩu phải chứa từ 6-20 ký tự")
+    @Size(min = 6,max = 50, message = "Mật khẩu phải chứa từ 6-20 ký tự")
     private String password ;
 
     private List<String> roles ;

@@ -1,9 +1,12 @@
 package com.example.mytech.model.request;
 
+import com.example.mytech.entity.Day;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.time.LocalTime;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -13,7 +16,7 @@ public class ScheduleReq {
 
     private String id;
 
-    private String dayOfWeek;
+    private Day dayOfWeek;
 
     private String startTime;
 
