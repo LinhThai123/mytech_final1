@@ -310,8 +310,6 @@
 
                                                 <td class="category-name" th:data-id="${category.id}"
                                                     th:text="${category.name}"></td>
-
-<!--                                                <td th:text="${category.courseCount}"></td>-->
                                                 <td>
                                                     <button class="btn" onclick="updateCategory(this)"
                                                             th:data-id="${category.id}"><i class="fas fa-edit"></i>
@@ -461,7 +459,6 @@
                 $('.list-category').append(`
                         <tr>
                             <td class="category-name" data-id="${data.id}">${data.name}</td>
-<!--                            <td>0</td>-->
                             <td>
                                 <button class="btn" onclick="updateCategory(this)" data-id="${data.id}"><i class="fas fa-edit"></i></button>
                                 <button class="btn" onclick="deleteCategory(this)" data-id="${data.id}"><i class="fas fa-trash-alt"></i></button>

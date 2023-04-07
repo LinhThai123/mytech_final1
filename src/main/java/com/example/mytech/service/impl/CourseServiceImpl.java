@@ -75,7 +75,7 @@ public class CourseServiceImpl implements CourseService {
 
     @SneakyThrows
     @Override
-    public Course createCourse(CourseRep rep) {
+    public Course createCourse(CourseRep rep){
         Course course = new Course();
         //check end_at
         Date date = new Date(System.currentTimeMillis()) ;

@@ -16,7 +16,8 @@
     <!-- Google Font: Source Sans Pro -->
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
     <!-- Toastr CSS -->
-    <link th:href="@{/vendor/toastr/toastr.min.css}" rel="stylesheet"/>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <!-- Admin CSS -->
     <link th:href="@{/adminlte/dist/css/admin.css}" rel="stylesheet"/>
     <!-- Select2 -->
@@ -260,19 +261,20 @@
                     <div class="col-12">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
-                            <li class="breadcrumb-item active">Danh sách Danh Mục</li>
+                            <li class="breadcrumb-item active">Danh sách Lịch Học</li>
                         </ol>
                     </div>
                 </div>
 
                 <!-- Toolbar -->
                 <div class="toolbar">
-                    <button class="btn btn-success" data-toggle="modal" data-target="#modal-add-new-category">
+                    <button class="btn btn-success" data-toggle="modal" data-target="#addScheduleModal">
                         <span class="fa fa-plus" style="margin-right:0.5rem;"></span>
-                        <span>Thêm Danh Mục</span>
+                        <span>Thêm Lịch Học</span>
                     </button>
-                    <a href="/admin/categories" class="btn btn-primary">Refresh <i
-                            class="fas fa-redo-alt"></i></a>
+                    <a href="/admin/schedules" class="btn btn-primary">Refresh
+                        <i class="fas fa-redo-alt"></i>
+                    </a>
                     <div class="clear"></div>
                 </div>
 
@@ -295,29 +297,25 @@
                                             <form method="GET" id="search-form">
                                                 <input type="hidden" name="id" id="id">
                                                 <th>
-                                                    <input type="text" name="nameCourse" id="nameCourse" class="form-control search-input">
+                                                    <!--                                                    <input type="text" name="nameCourse" id="nameCourse" class="form-control search-input">-->
                                                 </th>
                                                 <th></th>
                                                 <input type="hidden" name="page" id="page">
                                             </form>
                                         </tr>
                                         </thead>
-                                        <tbody class="list-category">
-                                        <th:block th:each="schedule : ${schedules}">
-                                            <tr data-item-id="1" th:attr="data-id = ${schedule.id}">
-
-                                                <td class="schedule-name" th:data-id="${schedule.id}"
-                                                    th:text="${schedule.course.name}"></td>
-                                                <td>
-                                                    <button class="btn" onclick="updateCategory(this)"
-                                                            th:data-id="${schedule.id}"><i class="fas fa-edit"></i>
-                                                    </button>
-                                                    <button class="btn" onclick="deleteCategory(this)"
-                                                            th:data-id="${schedule.id}"><i class="fas fa-trash-alt"></i>
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        </th:block>
+                                        <tbody class="list-schedule">
+                                        <tr th:each="schedule : ${schedules}">
+                                            <td class="schedule-name" th:text="${schedule.courseName}"></td>
+                                            <td>
+                                                <button class="btn" onclick="updateCategory(this)">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                <button class="btn" onclick="deleteCategory(this)">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
                                         </tbody>
                                     </table>
                                 </div>
@@ -329,74 +327,57 @@
                         </div>
                     </div>
                 </div>
-
                 <!-- Modal add new schedule-->
-                <div class="modal fade" id="modal-add-new-category" tabindex="-1" role="dialog"
-                     aria-labelledby="modalAddNewCategory" aria-hidden="true">
+                <div class="modal fade" id="addScheduleModal" tabindex="-1" role="dialog"
+                     aria-labelledby="addScheduleModalLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title">Thêm category</h5>
+                                <h5 class="modal-title" id="addScheduleModalLabel">Thêm Lịch Học</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <input type="text" class="form-control" id="new-category"
-                                       placeholder="Nhập category mới">
-                                <span class="invalid-feedback" id="invalid-feedback-new-category">Độ dài tên category từ 1 - 300 ký tự</span>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
-                                <button type="button" class="btn btn-primary btn-add-new-category">Thêm</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Modal update schedule-->
-                <div class="modal fade" id="modal-update-category" tabindex="-1" role="dialog"
-                     aria-labelledby="modalUpdateCategory" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title">Chỉnh sửa category</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <input type="text" hidden id="update-category-id">
-                                <input type="text" class="form-control" id="update-category"
-                                       placeholder="Nhập category mới">
-                                <span class="invalid-feedback" id="invalid-feedback-update-category">Độ dài tên category từ 1 - 300 ký tự</span>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
-                                <button type="button" class="btn btn-primary btn-update-category">Lưu</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Modal delete schedule-->
-                <div class="modal fade" id="modal-delete-category" tabindex="-1" role="dialog"
-                     aria-labelledby="modalDeleteCategory" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title">Xác nhận xóa category</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <input type="text" hidden id="delete-category-id">
-                                <span>Bạn chắc chắn muốn xóa category?</span>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
-                                <button type="button" class="btn btn-danger btn-delete-category">Xóa</button>
+                                <!-- Form thêm thời khóa biểu -->
+                                <form id="add-schedule-form">
+                                    <div class="form-group">
+                                        <div>
+                                            <label for="select_course" class="required-label">Khóa Học</label>
+                                        </div>
+                                        <select id="select_course" class="form-control" name="course_id">
+                                            <th:block th:each="course : ${courses}">
+                                                <option th:value="${course.id}" th:text="${course.name}">
+                                                </option>
+                                            </th:block>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="dayOfWeek">Ngày học</label>
+                                        <select class="form-control" id="dayOfWeek" name="dayOfWeek">
+                                            <option value="MONDAY">Thứ 2</option>
+                                            <option value="TUESDAY">Thứ 3</option>
+                                            <option value="WEDNESDAY">Thứ 4</option>
+                                            <option value="THURSDAY">Thứ 5</option>
+                                            <option value="FRIDAY">Thứ 6</option>
+                                            <option value="SATURDAY">Thứ 7</option>
+                                            <option value="SUNDAY">Chủ nhật</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="startTime">Thời gian bắt đầu</label>
+                                        <input type="text" class="form-control" id="startTime" placeholder="HH:MM:ss">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="endTime">Thời gian kết thúc</label>
+                                        <input type="text" class="form-control" id="endTime" placeholder="HH:MM:ss">
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng
+                                        </button>
+                                        <button type="submit" class="btn btn-primary">Thêm</button>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -424,19 +405,64 @@
 
 <script type="text/javascript" th:src="@{/adminlte/dist/js/table.js}"></script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js" integrity="sha512-Tn2m0TIpgVyTzzvmxLNuqbSJH3JP8jm+Cy3hvHrW7ndTDcJ1w5mBiksqDBb8GpE2ksktFvDB/ykZ0mDpsZj20w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"
+        integrity="sha512-Tn2m0TIpgVyTzzvmxLNuqbSJH3JP8jm+Cy3hvHrW7ndTDcJ1w5mBiksqDBb8GpE2ksktFvDB/ykZ0mDpsZj20w=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 <script th:inline="javascript">
+    let page;
     $(function () {
         let vars = parseUrl();
-        id =  vars["id"] || ""
-        name = vars["name"] || ""
-        page = vars["page"] || "0"
+        page = vars["page"] || "1"
 
-        $('#id').val(id)
-        $('#nameCourse').val(name)
         $('#page').val(page)
         pagination([[${totalPages}]], [[${currentPage}]])
+    });
+
+    $('#add-schedule-form').submit(function (event) {
+        event.preventDefault();
+
+        let course_id = $('#select_course').val();
+        let dayOfWeek = $('#dayOfWeek').val();
+        let startTime = $('#startTime').val();
+        let endTime = $('#endTime').val();
+
+        // Kiểm tra nếu có trường nào để trống thì hiển thị thông báo lỗi
+        if (course_id.length === 0 || dayOfWeek.length === 0 || startTime.length === 0 || endTime.length === 0) {
+            toastr.warning("Vui lòng điền đầy đủ thông tin");
+            return;
+        }
+
+        let req = {
+            course_id: course_id,
+            dayOfWeek: dayOfWeek,
+            startTime: startTime,
+            endTime: endTime
+        };
+        let myJSON = JSON.stringify(req);
+        $.ajax({
+            url: '/api/schedules',
+            type: 'POST',
+            data: myJSON,
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                toastr.success("Thêm lịch học thành công");
+                $('.list-schedule').append(`
+                <tr>
+                    <td>${data.course_name}</td>
+                    <td>
+                        <button class="btn" onclick="updateSchedule(this)" data-id="${data.id}"><i class="fas fa-edit"></i></button>
+                        <button class="btn" onclick="deleteSchedule(this)" data-id="${data.id}"><i class="fas fa-trash-alt"></i></button>
+                    </td>
+                </tr>
+            `);
+                $('#addScheduleModal').modal('hide');
+                $('#select_course').val('');
+            },
+            error: function (data) {
+                toastr.error(data.responseJSON.message);
+            }
+        });
     });
 </script>
 </body>

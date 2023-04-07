@@ -1,7 +1,6 @@
 package com.example.mytech.model.request;
 
 
-import com.example.mytech.entity.Schedule;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,7 +9,6 @@ import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -51,5 +49,7 @@ public class CourseRep {
     private String category_id;
 
     private List<ScheduleReq> schedules = new ArrayList<>();
+
+
 
 }
