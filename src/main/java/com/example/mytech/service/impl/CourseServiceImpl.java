@@ -23,6 +23,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Component
@@ -43,11 +47,10 @@ public class CourseServiceImpl implements CourseService {
     @Autowired
     private UserCourseRepository userCourseRepository;
 
-    @Autowired
-    private ScheduleService scheduleService;
-
-    @Autowired
-    private ScheduleRepository scheduleRepository;
+    @Override
+    public Course saveCourse(Course course) {
+        return courseRepository.save(course);
+    }
 
     @Override
     public List<Course> getListCourse() {

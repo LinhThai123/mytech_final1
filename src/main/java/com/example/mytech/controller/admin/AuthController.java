@@ -64,15 +64,11 @@ public class AuthController {
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
 
-        // Lấy danh sách UserCourse
-        List<UserCourse> courseLists = userDetails.getUser().getUserCoursesList();
-
         JwtResponse jwtResponse = new JwtResponse( jwt,
                 userDetails.getUser().getId(),
                 userDetails.getUser().getName(),
                 userDetails.getUser().getEmail(),
-                roles,
-                courseLists); // Thêm vào đây
+                roles); // Thêm vào đây
 
         return ResponseEntity.ok(jwtResponse);
 

@@ -42,5 +42,9 @@ public class UserCourse {
     public String getCourseId() {
         return this.course.getId();
     }
+    // lấy id của User
+    public String getUserId() {
+        return this.user.getId();
+    }
 
 }

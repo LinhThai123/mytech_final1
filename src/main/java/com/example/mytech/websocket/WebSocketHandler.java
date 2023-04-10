@@ -3,6 +3,7 @@ package com.example.mytech.websocket;
 import com.example.mytech.entity.Course;
 import com.example.mytech.model.dto.CourseDTO;
 import com.example.mytech.service.CourseService;
+import com.example.mytech.service.UserCourseService;
 import com.google.gson.Gson;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +24,11 @@ public class WebSocketHandler extends TextWebSocketHandler {
 
     @Autowired
     private CourseService courseService;
+
+    @Autowired
+    private UserCourseService userCourseService;
+
+
 
     public static List<WebSocketSession> sessions = new ArrayList<>();
 
@@ -84,4 +90,6 @@ public class WebSocketHandler extends TextWebSocketHandler {
             }
         }
     }
+
+
 }

@@ -18,4 +18,7 @@ public interface ScheduleService {
     public void deleteSchedule (String id) ;
 
     public Schedule getScheduleById (String id) ;
+
+    // Thêm mới hoặc cập nhật một lịch học
+    Schedule saveSchedule(Schedule schedule);
 }

@@ -4,6 +4,7 @@ import com.example.mytech.config.Contant;
 import com.example.mytech.entity.User;
 import com.example.mytech.entity.UserCourse;
 import com.example.mytech.exception.NotFoundException;
+import com.example.mytech.model.dto.UserCourseDTO;
 import com.example.mytech.model.request.ChangeStatusReq;
 import com.example.mytech.repository.UserCourseRepository;
 import com.example.mytech.service.UserCourseService;
@@ -15,7 +16,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @Component
@@ -23,6 +26,14 @@ public class UserCourseServiceImpl implements UserCourseService {
 
     @Autowired
     private UserCourseRepository userCourseRepository ;
+
+    @Override
+    public List<UserCourseDTO> findByUserId(String userId) {
+        List<UserCourse> userCourses = userCourseRepository.findByUser_Id(userId);
+        return userCourses.stream()
+                .map(uc -> new UserCourseDTO(uc.getCourseId(), uc.getEnrollDate(), uc.getStatus()))
+                .collect(Collectors.toList());
+    }
 
     @Override
     public UserCourse getUserCourseById(String id) {

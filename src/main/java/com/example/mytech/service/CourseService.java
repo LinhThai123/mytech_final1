@@ -1,6 +1,7 @@
 package com.example.mytech.service;
 
 import com.example.mytech.entity.Course;
+import com.example.mytech.entity.Schedule;
 import com.example.mytech.entity.User;
 import com.example.mytech.model.request.CourseRep;
 import com.example.mytech.model.request.ScheduleReq;
@@ -12,6 +13,8 @@ import java.util.List;
 
 @Service
 public interface CourseService {
+
+    public Course saveCourse(Course course);
 
     // get list course api
     List<Course> getListCourse () ;
@@ -40,5 +43,6 @@ public interface CourseService {
     public String uploadFile(MultipartFile file) ;
 
     public byte[] readFile (String fileId) ;
+
 
 }

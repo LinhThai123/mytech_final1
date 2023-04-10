@@ -13,11 +13,7 @@ import java.sql.Timestamp;
 @Getter
 public class UserCourseDTO {
 
-    private String id;
-
-    private String userName;
-
-    private String courseName;
+    private String courseId;
 
     private Timestamp enrollDate;
 

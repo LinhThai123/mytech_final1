@@ -1,5 +1,7 @@
 package com.example.mytech.entity;
 
+import java.time.DayOfWeek;
+
 public enum Day {
     MONDAY("Thứ 2"),
     TUESDAY("Thứ 3"),
@@ -13,5 +15,12 @@ public enum Day {
 
     private Day(String label) {
         this.label = label;
+    }
+
+    public DayOfWeek toDayOfWeek() {
+        return DayOfWeek.valueOf(this.name());
+    }
+    public String getLabel() {
+        return label;
     }
 }

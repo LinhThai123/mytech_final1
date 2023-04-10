@@ -12,6 +12,9 @@ import java.util.List;
 
 public interface UserCourseRepository extends JpaRepository<UserCourse, String> {
 
+
+    List<UserCourse> findByUser_Id(String id);
+
     List<UserCourse> findByUser(User user);
 
     @Query("SELECT uc FROM UserCourse uc JOIN uc.user u JOIN uc.course c JOIN u.roles r WHERE u.name LIKE %:username% AND r.name = 'ROLE_USER' AND c.name LIKE %:courseName%")

@@ -1,6 +1,5 @@
 package com.example.mytech.service.impl;
 
-
 import com.example.mytech.config.Contant;
 import com.example.mytech.entity.Course;
 import com.example.mytech.entity.Day;
@@ -119,5 +118,10 @@ public class ScheduleServiceImpl implements ScheduleService {
         }
         return schedule.get();
 
+    }
+
+    @Override
+    public Schedule saveSchedule(Schedule schedule) {
+        return scheduleRepository.save(schedule);
     }
 }

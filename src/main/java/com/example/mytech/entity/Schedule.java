@@ -37,4 +37,9 @@ public class Schedule {
     @JsonBackReference
     private Course course;
 
+    public Schedule(Day dayOfWeek, String startTime, String endTime) {
+        this.dayOfWeek = dayOfWeek;
+        this.startTime = startTime;
+        this.endTime = endTime;
+    }
 }

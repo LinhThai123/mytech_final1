@@ -51,5 +51,4 @@ public class CourseRep {
     private List<ScheduleReq> schedules = new ArrayList<>();
 
 
-
 }
