@@ -44,5 +44,4 @@ public interface CourseService {
 
     public byte[] readFile (String fileId) ;
 
-
 }

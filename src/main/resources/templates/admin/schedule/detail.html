@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <link rel="icon" th:href="@{/image/favicon.ico/favicon.ico}" type="image/x-icon"/>
-    <title>Danh Sách Khóa Học</title>
+    <title>Danh Sách Lịch Học</title>
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" th:href="@{/adminlte/plugins/fontawesome-free/css/all.min.css}">
     <!-- overlayScrollbars -->
@@ -258,25 +258,19 @@
                     <div class="col-12">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
-                            <li class="breadcrumb-item active">Danh sách Khóa Học</li>
+                            <li class="breadcrumb-item active">Danh sách lịch học</li>
                         </ol>
                     </div>
                 </div>
-
                 <!-- Toolbar -->
                 <div class="toolbar">
-                    <a role="button" class="btn btn-success" href="/admin/courses/create">
+                    <a role="button" class="btn btn-default" href="/admin/schedules">
+                        <span class="fas fa-chevron-left" style="margin-right:0.5rem;"></span>
+                        <span>Trở về</span>
+                    </a>
+                    <button class="btn btn-success btn-update-schedule" type="submit">
                         <span class="fa fa-plus" style="margin-right:0.5rem;"></span>
-                        <span>Thêm Khóa Học</span>
-                    </a>
-
-                    <a role="button" class="btn btn-info" href="/admin/courses">
-                        <span class="fas fa-redo-alt" style="margin-right:0.5rem;"></span>
-                        <span>Refresh</span>
-                    </a>
-                    <button class="btn btn-secondary" id="btn-search">
-                        <span class="fas fa-search" style="margin-right:0.5rem;"></span>
-                        <span>Tìm kiếm</span>
+                        <span>Cập nhật</span>
                     </button>
                     <div class="clear"></div>
                 </div>
@@ -290,85 +284,66 @@
                                     <table class="table table-striped table-bordered table-hover">
                                         <thead>
                                         <tr class="heading">
-                                            <th width="20%">
-                                                Tên Lớp
+                                            <th width="10%">
+                                                Thứ học
                                             </th>
                                             <th width="15%">
-                                                Cấp độ
+                                                Ngày học
                                             </th>
                                             <th width="15%">
-                                                Hình thức
+                                                Ca học
                                             </th>
                                             <th width="15%">
-                                                Ngày công khai
+                                                Trạng thái
                                             </th>
                                             <th width="15%">
-                                                Ngày kết thúc
+                                                Chức năng
                                             </th>
                                         </tr>
                                         <tr class="heading-search">
                                             <form method="GET" id="search-form">
+                                                <th></th>
+                                                <th></th>
                                                 <th>
-                                                    <input type="text" name="name" id="name"
-                                                           class="form-control thuy-search-input">
-                                                </th>
-                                                <th>
-                                                    <select name="level" class="form-control thuy-search-select"
-                                                            id="level">
-                                                        <option value="">Tất cả</option>
-                                                        <option value="0">Beginer</option>
-                                                        <option value="1">Medium</option>
-                                                        <option value="2">Good</option>
-                                                    </select>
                                                 </th>
                                                 <th>
                                                     <select name="status" class="form-control thuy-search-select"
                                                             id="status">
                                                         <option value="">Tất cả</option>
-                                                        <option value="0">Online</option>
-                                                        <option value="1">Offline</option>
+                                                        <option value="1">Đi học</option>
+                                                        <option value="0">Nghỉ học</option>
                                                     </select>
                                                 </th>
-                                                <th></th>
                                                 <th></th>
                                                 <input type="hidden" name="page" id="page">
                                             </form>
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <th:block th:each="course : ${courses}">
+                                        <th:block th:each="schedule : ${schedules}">
                                             <tr>
-                                                <td>
-                                                    <a th:href="@{/admin/courses/{id}(id=${course.id})}"
-                                                       th:text="${course.name}"></a>
+                                                <td class="schedule-dayOfWeek" th:data-id="${schedule.id}"
+                                                    th:text="${schedule.dayOfWeek}">
+                                                </td>
+                                                <td class="schedule-day" th:data-id="${schedule.id}" >
+                                                    <span th:text="${#dates.format(schedule.day, 'dd-MM-yyyy')}"></span>
+                                                </td>
+                                                <td class="schedule-duration" th:data-id="${schedule.id}"
+                                                    th:text="${schedule.duration}">
+                                                </td>
+                                                <td class="schedule-status" th:data-id="${schedule.id}">
+                                                    <span id="schedule-status" th:text="${schedule.status == 1} ? 'Đi học' : 'Nghỉ học'"></span>
+                                                </td>
                                                 </td>
                                                 <td>
-                                                    <th:block th:if="${course.level} == 0">
-                                                        Beginner
-                                                    </th:block>
-                                                    <th:block th:if="${course.level} == 1">
-                                                        Medium
-                                                    </th:block>
-                                                    <th:block th:if="${course.level} == 2">
-                                                        Good
-                                                    </th:block>
-                                                </td>
-                                                <td>
-                                                    <th:block th:if="${course.status} == 1">
-                                                        Offline
-                                                    </th:block>
-                                                    <th:block th:if="${course.status} == 0">
-                                                        Online
-                                                    </th:block>
-                                                </td>
-                                                <td>
-                                                    <span th:text="${#dates.format(course.publishedAt, 'dd-MM-yyyy')}"></span>
-                                                </td>
-                                                <td>
-                                                    <th:block th:if="${course.active} == 1">
-                                                        <span th:text="${#dates.format(course.expiredAt, 'dd-MM-yyyy')}"></span>
-                                                    </th:block>
-
+                                                    <button class="btn btn-update-schedule" onclick="updateSchedule(this)"
+                                                            th:data-id="${schedule.id}">
+                                                        <i class="fas fa-edit"></i>
+                                                    </button>
+                                                    <button class="btn" onclick="deleteSchedule(this)"
+                                                            th:data-id="${schedule.id}">
+                                                        <i class="fas fa-trash-alt"></i>
+                                                    </button>
                                                 </td>
                                             </tr>
                                         </th:block>
@@ -379,6 +354,85 @@
                                 <nav aria-label="Page navigation">
                                     <ul class="pagination" id="pagination"></ul>
                                 </nav>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal update new schedule-->
+                <div class="modal fade" id="updateScheduleModal" tabindex="-1" role="dialog"
+                     aria-labelledby="updateScheduleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="addScheduleModalLabel">Sửa Lịch Học</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <!-- Form sửa thời khóa biểu -->
+                                <form id="update-schedule-form">
+                                    <input type="hidden"  id="update-schedule-id">
+                                    <div class="form-group">
+                                        <label for="update-day">Ngày Học</label>
+                                        <input type="date" class="form-control" id="update-day" name="update-day">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="update-dayOfWeek">Thứ</label>
+                                        <select class="form-control" id="update-dayOfWeek" name="update-dayOfWeek">
+                                            <option value="MONDAY">Thứ 2</option>
+                                            <option value="TUESDAY">Thứ 3</option>
+                                            <option value="WEDNESDAY">Thứ 4</option>
+                                            <option value="THURSDAY">Thứ 5</option>
+                                            <option value="FRIDAY">Thứ 6</option>
+                                            <option value="SATURDAY">Thứ 7</option>
+                                            <option value="SUNDAY">Chủ nhật</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="update-duration">Ca học</label>
+                                        <select class="form-control" id="update-duration" name="update-duration">
+                                            <option value="CA_1">CA 1</option>
+                                            <option value="CA_2">CA 2</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="update-status">Trạng thái</label>
+                                        <select class="form-control" id="update-status" name="update-status">
+                                            <option th:value="1">Đi Học</option>
+                                            <option th:value="0">Nghỉ Học</option>
+                                        </select>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng
+                                        </button>
+                                        <button type="submit" class="btn btn-primary">Cập nhật</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal delete category-->
+                <div class="modal fade" id="deleteScheduleModal" tabindex="-1" role="dialog"
+                     aria-labelledby="modalDeleteSchedule" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Xác nhận xóa lịch học</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <input type="hidden" id="delete-schedule-id">
+                                <span>Bạn chắc chắn muốn xóa lịch học này?</span>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                                <button type="button" class="btn btn-danger btn-delete-schedule">Xóa</button>
                             </div>
                         </div>
                     </div>
@@ -405,6 +459,8 @@
 <script type="text/javascript" th:src="@{/vendor/pagination/jquery.simplePagination.js}"></script>
 <script type="text/javascript" th:src="@{/adminlte/dist/js/table.js}"></script>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"
         integrity="sha512-Tn2m0TIpgVyTzzvmxLNuqbSJH3JP8jm+Cy3hvHrW7ndTDcJ1w5mBiksqDBb8GpE2ksktFvDB/ykZ0mDpsZj20w=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -422,6 +478,140 @@
         pagination([[${totalPages}]], [[${currentPage}]]);
 
     });
+
+    // Hàm chọn ngày ra thứ
+    $(document).ready(function() {
+        $('#update-day').on('change', function() {
+            var selectedDate = new Date($(this).val());
+            var dayOfWeekSelect = $('#update-dayOfWeek');
+
+            dayOfWeekSelect.val(selectedDate.toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase());
+        });
+    });
+
+    // Hàm chọn thứ ra ngày
+    $(document).ready(function() {
+        $('#update-dayOfWeek').on('change', function() {
+            var selectedDayOfWeek = $(this).val().toLowerCase(); // Lấy giá trị thứ đã chọn
+
+            // Tính toán ngày của thứ đã chọn
+            var date = moment().startOf('isoWeek'); // Lấy ngày bắt đầu của tuần hiện tại
+            var days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+
+            var selectedDate = null;
+            for (var i = 0; i < days.length; i++) {
+                if (days[i] === selectedDayOfWeek) {
+                    selectedDate = moment(date).add(i, 'days'); // Thêm số ngày tương ứng với thứ đã chọn
+                    break;
+                }
+            }
+
+            // Đưa ngày đã tính được vào trường input
+            if (selectedDate) {
+                $('#update-day').val(selectedDate.format('YYYY-MM-DD'));
+            } else {
+                $('#update-day').val('');
+            }
+        });
+    });
+
+    // Hàm cập nhật lịch học
+    function updateSchedule(btn) {
+        let id = $(btn).data('id');
+        let day = $('.schedule-day[data-id=' + id + '] span').text();
+        if (day) {
+            let momentDay = moment(day, 'DD-MM-YYYY');
+
+            momentDay.utcOffset(7);
+            day = momentDay.format('YYYY-MM-DD');
+        }
+
+        let dayOfWeek = $('.schedule-dayOfWeek[data-id=' + id + ']').text();
+        let duration = $('.schedule-duration[data-id=' + id + ']').text();
+
+        var scheduleStatus = $('#schedule-status').text();
+        if (scheduleStatus === 'Đi học') {
+            $('#update-status').val('1');
+        } else if (scheduleStatus === 'Nghỉ học') {
+            $('#update-status').val('0');
+        } else {
+            toastr.error("Trạng thái không hợp lệ");
+        }
+        $('#update-day').val(day ? day : '');
+        $('#update-dayOfWeek').val(dayOfWeek);
+        $('#update-duration').val(duration);
+        $('#update-schedule-id').val(id);
+        $('#updateScheduleModal').modal('show');
+
+        // Xử lý sự kiện submit form cập nhật lịch học
+        $('#update-schedule-form').submit(function (event) {
+            event.preventDefault();
+            let id = $('#update-schedule-id').val();
+            let day = $('#update-day').val();
+            let dayOfWeek = $('#update-dayOfWeek').val();
+            let duration = $('#update-duration').val();
+            let status = $('#update-status').val();
+
+            // Kiểm tra xem các trường dữ liệu đã được điền đầy đủ hay chưa
+            if (id.length === 0 || day.length === 0 || dayOfWeek.length === 0 || duration.length === 0 || status.length === 0) {
+                toastr.warning("Vui lòng điền đầy đủ thông tin");
+                return;
+            }
+
+            let scheduleData = {
+                id: id,
+                day: day,
+                dayOfWeek: dayOfWeek,
+                duration: duration,
+                status: status
+            };
+
+            // Gọi API để cập nhật dữ liệu
+            $.ajax({
+                url: `/api/update/schedules/${id}`,
+                type: 'PUT',
+                data: JSON.stringify(scheduleData),
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    $('#updateScheduleModal').modal('hide');
+                    toastr.success("Cập nhật lịch học thành công");
+                    location.reload();
+                },
+                error: function (data) {
+                    toastr.warning(data.responseJSON.message);
+                }
+            });
+        });
+    }
+
+    // Hàm xóa lịch học của khóa học
+    function deleteSchedule(btn) {
+        let id = $(btn).data('id');
+        $('#delete-schedule-id').val(id);
+        $('#deleteScheduleModal').modal('show');
+
+        // Xóa dữ liệu khi nhấn nút "Xóa" trong modal
+        $('#deleteScheduleModal .btn-delete-schedule').click(function () {
+            $.ajax({
+                url: '/api/delete/schedule/' + id,
+                type: 'DELETE',
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    toastr.success("Xóa thành công");
+                    $('.schedule-dayOfWeek[data-id=' + id + ']').parent().remove();
+                    $('.schedule-day[data-id=' + id + ']').parent().remove();
+                    $('.category-duration[data-id=' + id + ']').parent().remove();
+                    $('.category-status[data-id=' + id + ']').parent().remove();
+                    $('#deleteScheduleModal').modal('hide');
+                    $('#delete-schedule-id').val('');
+                },
+                error: function (data) {
+                    toastr.warning(data.responseJSON.message);
+                }
+            });
+        });
+    }
+
 </script>
 </body>
 </html>

@@ -210,7 +210,7 @@
                         </ul>
                     </li>
                     <li class="nav-item has-treeview">
-                        <a href="/admin/posts" class="nav-link">
+                        <a href="/admin/blogs" class="nav-link">
                             <i class="nav-icon fas fa-file"></i>
                             <p>
                                 Quản lý blog
@@ -219,13 +219,13 @@
                         </a>
                         <ul class="nav nav-treeview">
                             <li class="nav-item">
-                                <a href="/admin/posts" class="nav-link">
+                                <a href="/admin/blogs" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Danh sách bài viết</p>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="/admin/posts/create" class="nav-link">
+                                <a href="/admin/blogs/create" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Tạo bài viết mới</p>
                                 </a>
@@ -291,29 +291,19 @@
                                             <th width="55%">
                                                 Tên Khóa Học
                                             </th>
-                                            <th> Chức năng</th>
                                         </tr>
                                         <tr>
                                             <form method="GET" id="search-form">
                                                 <input type="hidden" name="id" id="id">
-                                                <th>
-                                                    <!--                                                    <input type="text" name="nameCourse" id="nameCourse" class="form-control search-input">-->
-                                                </th>
                                                 <th></th>
                                                 <input type="hidden" name="page" id="page">
                                             </form>
                                         </tr>
                                         </thead>
                                         <tbody class="list-schedule">
-                                        <tr th:each="schedule : ${schedules}">
-                                            <td class="schedule-name" th:text="${schedule.courseName}"></td>
-                                            <td>
-                                                <button class="btn" onclick="updateCategory(this)">
-                                                    <i class="fas fa-edit"></i>
-                                                </button>
-                                                <button class="btn" onclick="deleteCategory(this)">
-                                                    <i class="fas fa-trash-alt"></i>
-                                                </button>
+                                        <tr th:each="schedule, iter : ${schedules}">
+                                            <td th:if="${iter.index == 0 || schedule.courseName != schedules[iter.index-1].courseName}">
+                                                <a th:href="@{/courses/{id}/schedules(id=${schedule.courseId})}" th:text="${schedule.courseName}"></a>
                                             </td>
                                         </tr>
                                         </tbody>
@@ -353,7 +343,11 @@
                                         </select>
                                     </div>
                                     <div class="form-group">
-                                        <label for="dayOfWeek">Ngày học</label>
+                                        <label for="day">Ngày Học</label>
+                                        <input type="date" class="form-control" id="day" name="day">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="dayOfWeek">Thứ</label>
                                         <select class="form-control" id="dayOfWeek" name="dayOfWeek">
                                             <option value="MONDAY">Thứ 2</option>
                                             <option value="TUESDAY">Thứ 3</option>
@@ -365,12 +359,18 @@
                                         </select>
                                     </div>
                                     <div class="form-group">
-                                        <label for="startTime">Thời gian bắt đầu</label>
-                                        <input type="text" class="form-control" id="startTime" placeholder="HH:MM:ss">
+                                        <label for="duration">Ca học</label>
+                                        <select class="form-control" id="duration" name="duration">
+                                            <option value="CA_1">CA 1</option>
+                                            <option value="CA_2">CA 2</option>
+                                        </select>
                                     </div>
                                     <div class="form-group">
-                                        <label for="endTime">Thời gian kết thúc</label>
-                                        <input type="text" class="form-control" id="endTime" placeholder="HH:MM:ss">
+                                        <label for="status">Trạng thái</label>
+                                        <select class="form-control" id="status" name="status">
+                                            <option value="1">Đi Học</option>
+                                            <option value="0">Nghỉ Học</option>
+                                        </select>
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng
@@ -419,34 +419,44 @@
         pagination([[${totalPages}]], [[${currentPage}]])
     });
 
+    $(document).ready(function() {
+        $('#day').on('change', function() {
+            var selectedDate = new Date($(this).val());
+            var dayOfWeekSelect = $('#dayOfWeek');
+
+            dayOfWeekSelect.val(selectedDate.toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase());
+        });
+    });
+
     $('#add-schedule-form').submit(function (event) {
         event.preventDefault();
 
         let course_id = $('#select_course').val();
         let dayOfWeek = $('#dayOfWeek').val();
-        let startTime = $('#startTime').val();
-        let endTime = $('#endTime').val();
+        let day = $('#day').val();
+        let duration = $('#duration').val();
+        let status = $('#status').val() ;
 
-        // Kiểm tra nếu có trường nào để trống thì hiển thị thông báo lỗi
-        if (course_id.length === 0 || dayOfWeek.length === 0 || startTime.length === 0 || endTime.length === 0) {
+        if (course_id.length === 0 || dayOfWeek.length === 0 || duration.length === 0 || status.length === "") {
             toastr.warning("Vui lòng điền đầy đủ thông tin");
             return;
         }
 
         let req = {
-            course_id: course_id,
+            course_id : course_id,
             dayOfWeek: dayOfWeek,
-            startTime: startTime,
-            endTime: endTime
+            day: day,
+            duration: duration,
+            status: status
         };
-        let myJSON = JSON.stringify(req);
+
         $.ajax({
-            url: '/api/schedules',
+            url: `/api/schedules`, // Đường dẫn endpoint của API
             type: 'POST',
-            data: myJSON,
+            data: JSON.stringify(req),
             contentType: "application/json; charset=utf-8",
             success: function (data) {
-                toastr.success("Thêm lịch học thành công");
+
                 $('.list-schedule').append(`
                 <tr>
                     <td>${data.course_name}</td>
@@ -457,13 +467,16 @@
                 </tr>
             `);
                 $('#addScheduleModal').modal('hide');
-                $('#select_course').val('');
+                toastr.success("Thêm lịch học thành công");
+                location.reload();
             },
             error: function (data) {
                 toastr.error(data.responseJSON.message);
             }
         });
     });
+
+
 </script>
 </body>
 </html>

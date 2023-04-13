@@ -3,8 +3,9 @@ package com.example.mytech.controller.api;
 import com.example.mytech.entity.Course;
 import com.example.mytech.entity.Schedule;
 import com.example.mytech.entity.User;
+import com.example.mytech.model.dto.CourseDTO;
 import com.example.mytech.model.request.CourseRep;
-import com.example.mytech.model.request.ScheduleReq;
+import com.example.mytech.repository.UserRepository;
 import com.example.mytech.service.CourseService;
 import com.example.mytech.service.ScheduleService;
 import com.example.mytech.service.UserService;
@@ -13,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -24,6 +26,9 @@ public class CourseApiController {
 
     @Autowired
     private UserService userService ;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
     private ScheduleService scheduleService;
@@ -75,4 +80,34 @@ public class CourseApiController {
          return ResponseEntity.ok(course);
     }
 
+    // Lấy danh sách khóa học có giảng viên , lịch học của khóa học đó
+    @GetMapping("courses/users/schedules")
+    public List<CourseDTO> getCoursesWithTeacherAndSchedule() {
+        List<Course> courses = courseService.getListCourse();
+        List<CourseDTO> courseDTOs = new ArrayList<>();
+
+        for (Course course : courses) {
+            List<User> users = userService.findUsersWithRoleTeacherInCourse(course.getId()) ;
+
+            List<Schedule> schedules = course.getSchedules();
+
+            // Tạo đối tượng CourseDTO chứa thông tin cần thiết
+            CourseDTO courseDTO = new CourseDTO();
+            courseDTO.setId(course.getId());
+            courseDTO.setName(course.getName());
+            courseDTO.setDescription(course.getDescription());
+            courseDTO.setActive(course.getActive());
+            courseDTO.setExpiredAt(course.getExpiredAt());
+            courseDTO.setImage(course.getImage());
+            courseDTO.setLevel(course.getLevel());
+            courseDTO.setPrice(course.getPrice());
+            courseDTO.setPublishedAt(course.getPublishedAt());
+            courseDTO.setStatus(course.getStatus());
+            courseDTO.setUsers(users);
+            courseDTO.setScheduleList(schedules);
+
+            courseDTOs.add(courseDTO);
+        }
+        return courseDTOs;
+    }
 }

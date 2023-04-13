@@ -89,7 +89,4 @@ public class User {
     @JsonIgnore
     private Set<UserCourse> userCourses = new HashSet<>();
 
-    public List<UserCourse> getUserCoursesList() {
-        return new ArrayList<>(this.userCourses);
-    }
 }

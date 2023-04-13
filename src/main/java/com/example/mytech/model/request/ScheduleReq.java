@@ -1,11 +1,15 @@
 package com.example.mytech.model.request;
 
-import com.example.mytech.entity.Day;
+import com.example.mytech.entity.CA;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.DayOfWeek;
+import java.util.Date;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -15,11 +19,15 @@ public class ScheduleReq {
 
     private String id;
 
-    private Day dayOfWeek;
+    private DayOfWeek dayOfWeek;
 
-    private String startTime;
+    @JsonProperty("day")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date day;
 
-    private String endTime;
+    private CA duration;
+
+    private Integer status ;
 
     private String course_id;
 }

@@ -6,19 +6,23 @@ import com.example.mytech.model.request.ScheduleReq;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
+import java.util.List;
+
 @Service
 public interface ScheduleService {
 
+    public List<Schedule> getListSchedule () ;
+
     Page<ScheduleDTO> findScheduleByCourseName (Integer page);
 
-    public Schedule createSchedule ( ScheduleReq req) ;
+    public Schedule createSchedule ( ScheduleReq req) throws ParseException;
 
     public Schedule updateSchedule (String id, ScheduleReq req) ;
 
-    public void deleteSchedule (String id) ;
+    public void deleteSchedule (Schedule schedule) ;
 
     public Schedule getScheduleById (String id) ;
 
-    // Thêm mới hoặc cập nhật một lịch học
-    Schedule saveSchedule(Schedule schedule);
+    public List<Schedule> getCourseSchedules (String courseId ) ;
 }

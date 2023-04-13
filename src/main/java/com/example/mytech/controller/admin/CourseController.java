@@ -44,7 +44,7 @@ public class CourseController {
     ModelMapper modelMapper = new ModelMapper();
 
     @GetMapping("/courses")
-    public String getAdminProducts(Model model,
+    public String getAdminCourse(Model model,
                                    @RequestParam(defaultValue = "", required = false) String id,
                                    @RequestParam(defaultValue = "", required = false) String name,
                                    @RequestParam(defaultValue = "1", required = false) Integer page) {

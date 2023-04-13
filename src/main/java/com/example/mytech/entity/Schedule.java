@@ -8,6 +8,9 @@ import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.time.DayOfWeek;
+import java.time.LocalTime;
+import java.util.Date;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -24,22 +27,21 @@ public class Schedule {
 
     @Column(name = "day_of_week" , nullable = false)
     @Enumerated(EnumType.STRING)
-    private Day dayOfWeek;
+    private DayOfWeek dayOfWeek;
 
-    @Column(name = "start_time", nullable = false)
-    private String startTime;
+    @Column(name = "day" , nullable = false)
+    private Date day ;
 
-    @Column(name = "end_time", nullable = false)
-    private String endTime;
+    @Column(name = "ca", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private CA duration;
+
+    @Column(name = "status" ,columnDefinition = "TINYINT(1)") // 1 học , 0 nghỉ
+    private int status ;
 
     @ManyToOne
     @JoinColumn(name = "course_id", nullable = false)
     @JsonBackReference
     private Course course;
 
-    public Schedule(Day dayOfWeek, String startTime, String endTime) {
-        this.dayOfWeek = dayOfWeek;
-        this.startTime = startTime;
-        this.endTime = endTime;
-    }
 }

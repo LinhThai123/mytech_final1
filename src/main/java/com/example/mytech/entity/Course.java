@@ -6,15 +6,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
-import org.springframework.format.annotation.DateTimeFormat;
-
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.time.Instant;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Getter
@@ -58,6 +54,12 @@ public class Course {
     @Column(name = "created_at", nullable = false)
     private Timestamp createdAt;
 
+    @Column(name = "Number_Of_Sessions" , nullable = false)
+    private int numberOfSessions ;
+
+    @Column(name = "address" , nullable = false)
+    private String address;
+
     @Column(name = "modified_at", nullable = false)
     private Timestamp modifiedAt;
 
@@ -85,46 +87,18 @@ public class Course {
             user.getCourses().remove(this);
         }
     }
-    public LocalDate getStartDate() {
-        return createdAt.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+    public Date getStartDate() {
+        Instant instant = publishedAt.toInstant();
+        Date date = Date.from(instant); // Chuyển đổi từ Instant sang Date
+        return date;
     }
-
-    public LocalDate getEndDate() {
+    public Date getEndDate() {
         if (expiredAt == null) {
             return null;
         }
-        return expiredAt.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        Instant instant = expiredAt.toInstant();
+        Date date = Date.from(instant); // Chuyển đổi từ Instant sang Date
+        return date;
     }
 
-    public List<Schedule> generateWeeklySchedules(int numberOfWeeks) {
-        List<Schedule> weeklySchedules = new ArrayList<>();
-        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
-        for (Schedule schedule : this.schedules) {
-            LocalTime startTime = LocalTime.parse(schedule.getStartTime(), timeFormatter);
-            LocalTime endTime = LocalTime.parse(schedule.getEndTime(), timeFormatter);
-
-            LocalDate courseStartDate = this.getStartDate();
-            LocalDate courseEndDate = this.getEndDate();
-
-            // Kiểm tra số tuần được chỉ định có nằm trong khoảng thời gian của khóa học không
-            LocalDate startDateForWeeks = courseStartDate.plusWeeks(numberOfWeeks - 1);
-            if (startDateForWeeks.isAfter(courseEndDate)) {
-                continue;
-            }
-
-            for (int i = 0; i < numberOfWeeks; i++) {
-                LocalDateTime newStartDateTime = LocalDateTime.of(courseStartDate.plusWeeks(i), startTime);
-                LocalDateTime newEndDateTime = LocalDateTime.of(courseStartDate.plusWeeks(i), endTime);
-
-                Schedule weeklySchedule = new Schedule();
-                weeklySchedule.setDayOfWeek(schedule.getDayOfWeek());
-                weeklySchedule.setStartTime(newStartDateTime.toString());
-                weeklySchedule.setEndTime(newEndDateTime.toString());
-
-                weeklySchedules.add(weeklySchedule);
-            }
-        }
-
-        return weeklySchedules;
-    }
 }

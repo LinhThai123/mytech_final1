@@ -214,7 +214,7 @@
                         </ul>
                     </li>
                     <li class="nav-item has-treeview">
-                        <a href="/admin/posts" class="nav-link">
+                        <a href="/admin/blogs" class="nav-link">
                             <i class="nav-icon fas fa-file"></i>
                             <p>
                                 Quản lý blog
@@ -223,13 +223,13 @@
                         </a>
                         <ul class="nav nav-treeview">
                             <li class="nav-item">
-                                <a href="/admin/posts" class="nav-link">
+                                <a href="/admin/blogs" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Danh sách bài viết</p>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="/admin/posts/create" class="nav-link">
+                                <a href="/admin/blogs/create" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Tạo bài viết mới</p>
                                 </a>
@@ -262,19 +262,19 @@
 
             <div class="container-fluid">
                 <!-- Breadcrumb -->
-                <form method="post" th:action="@{/admin/posts/update/{id}(id=${post.id})}" th:object="${post}">
+                <form method="post" th:action="@{/admin/blogs/update/{id}(id=${blog.id})}" th:object="${blog}">
                     <div class="row">
                         <div class="col-12">
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
-                                <li class="breadcrumb-item"><a href="/admin/posts">Danh sách tin tức</a></li>
+                                <li class="breadcrumb-item"><a href="/admin/blogs">Danh sách tin tức</a></li>
                                 <li class="breadcrumb-item active">Tin tức chi tiết</li>
                             </ol>
                         </div>
                     </div>
                     <!-- Toolbar -->
                     <div class="toolbar">
-                        <a role="button" class="btn btn-default" href="/admin/posts">
+                        <a role="button" class="btn btn-default" href="/admin/blogs">
                             <span class="fas fa-chevron-left" style="margin-right:0.5rem;"></span>
                             <span>Trở về</span>
                         </a>
@@ -344,7 +344,7 @@
                                                 <div class="thumbnail-container">
                                                     <div class="img-div">
                                                         <img id="preview-img" class="thumnail"
-                                                             th:src="@{${'http://localhost:8081'+ post.thumbnail}}"
+                                                             th:src="@{${'http://localhost:8081'+ blog.thumbnail}}"
                                                              alt="Thumbnail product">
                                                     </div>
                                                 </div>
@@ -401,7 +401,7 @@
                 </div>
             </div>
         </div>
-        <div class="modal fade" id="modal-delete-post" tabindex="-1" role="dialog"
+        <div class="modal fade" id="modal-delete-blog" tabindex="-1" role="dialog"
              aria-labelledby="modalDeleteProduct" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -416,7 +416,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
-                        <a th:href="@{'/admin/posts/delete/'+ ${post.id}}"
+                        <a th:href="@{'/admin/blogs/delete/'+ ${blog.id}}"
                            class="btn btn-danger btn-delete-product">Xóa</a>
                     </div>
                 </div>
@@ -544,7 +544,7 @@
     }
     $(document).ready(function(){
         $("#btn-delete").click(function(){
-            $("#modal-delete-post").modal('show');
+            $("#modal-delete-blog").modal('show');
         });
     });
 </script>

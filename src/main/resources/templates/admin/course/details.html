@@ -212,7 +212,7 @@
                         </ul>
                     </li>
                     <li class="nav-item has-treeview">
-                        <a href="/admin/posts" class="nav-link">
+                        <a href="/admin/blogs" class="nav-link">
                             <i class="nav-icon fas fa-file"></i>
                             <p>
                                 Quản lý blog
@@ -221,13 +221,13 @@
                         </a>
                         <ul class="nav nav-treeview">
                             <li class="nav-item">
-                                <a href="/admin/posts" class="nav-link">
+                                <a href="/admin/blogs" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Danh sách bài viết</p>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="/admin/posts/create" class="nav-link">
+                                <a href="/admin/blogs/create" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Tạo bài viết mới</p>
                                 </a>
@@ -320,6 +320,15 @@
                                             </div>
                                             <div class="form-group">
                                                 <div>
+                                                    <label class="required-label">Địa chỉ</label>
+                                                    <span class="text-danger" th:if="${#fields.hasErrors('address')}"
+                                                          th:errors="*{address}">address Error</span>
+                                                </div>
+                                                <input type="text" class="form-control" id="address" name="address"
+                                                       th:field="*{address}">
+                                            </div>
+                                            <div class="form-group">
+                                                <div>
                                                     <label class="required-label" for="description">Mô tả</label>
                                                     <span class="text-danger"
                                                           th:if="${#fields.hasErrors('description')}"
@@ -390,6 +399,16 @@
                                                 </div>
                                                 <input type="text" class="form-control text-price-input" id="price"
                                                        name="price" th:field="*{price}">
+                                            </div>
+                                            <div class="form-group">
+                                                <div>
+                                                    <label class="required-label" for="numberOfSessions">Số buổi học</label>
+                                                    <span class="text-danger" th:if="${#fields.hasErrors('numberOfSessions')}"
+                                                          th:errors="*{numberOfSessions}">numberOfSessions Error
+                                                    </span>
+                                                </div>
+                                                <input type="text" class="form-control text-price-input" id="numberOfSessions"
+                                                       name="numberOfSessions" th:field="*{numberOfSessions}">
                                             </div>
                                             <input type="hidden" name="image" id="image" th:field="*{image}">
                                             <div class="form-group">

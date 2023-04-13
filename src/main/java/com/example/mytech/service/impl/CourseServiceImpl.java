@@ -26,6 +26,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
@@ -125,6 +126,10 @@ public class CourseServiceImpl implements CourseService {
         course.setImage(rep.getImage());
 
         course.setLevel(rep.getLevel());
+
+        course.setNumberOfSessions(rep.getNumberOfSessions());
+
+        course.setAddress(rep.getAddress());
 
         // get list category by id
         if (rep.getCategory_id().isEmpty()) {

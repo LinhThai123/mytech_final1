@@ -3,12 +3,10 @@ package com.example.mytech.service.impl;
 import com.example.mytech.entity.Image;
 import com.example.mytech.exception.BadRequestException;
 import com.example.mytech.repository.ImageRepository;
-import com.example.mytech.security.CustomUserDetails;
 import com.example.mytech.service.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StreamUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,7 +25,7 @@ public class ImageServiceImpl implements ImageService {
     private final Path rootDir = Paths.get("src/main/resources/static/uploads");
 
     @Autowired
-    private ImageRepository imageRepository ;
+    private ImageRepository imageRepository;
 
     public ImageServiceImpl() {
         createFolder(rootDir.toString());
@@ -36,7 +34,7 @@ public class ImageServiceImpl implements ImageService {
     @Override
     public void createFolder(String path) {
         File folder = new File(path);
-        if(!folder.exists()){
+        if (!folder.exists()) {
             folder.mkdirs();
         }
     }
@@ -56,17 +54,17 @@ public class ImageServiceImpl implements ImageService {
         }
         // Kiểm tra đuôi file
         String fileExtenSion = getFileExtension(fileName);
-        if(!checkFileExtension(fileExtenSion)){
-            throw  new BadRequestException("Vui lòng chỉ upload file có các định đạng png,jpg,jpeg");
+        if (!checkFileExtension(fileExtenSion)) {
+            throw new BadRequestException("Vui lòng chỉ upload file có các định đạng png,jpg,jpeg");
         }
         // Kiểm tra size
-        if((double)file.getSize() / 1_000_000L >2){
-            throw  new BadRequestException(("File không được vượt quá 2 MB"));
+        if ((double) file.getSize() / 1_000_000L > 2) {
+            throw new BadRequestException(("File không được vượt quá 2 MB"));
         }
 
         //Tạo Path tương ứng với file Upload lên
         String generateFileName = UUID.randomUUID().toString() + fileName;
-        File serverFile = new File(pathDir.toString()+"/"+ generateFileName);
+        File serverFile = new File(pathDir.toString() + "/" + generateFileName);
 
         try {
             // Sử dụng Buffer để lưu dữ liệu
@@ -79,8 +77,7 @@ public class ImageServiceImpl implements ImageService {
             Image image = Image.builder().id(generateFileName).name(fileName).link(filePath).size(file.getSize()).build();
             imageRepository.save(image);
             return filePath;
-        }
-        catch (FileNotFoundException e) {
+        } catch (FileNotFoundException e) {
             throw new RuntimeException("Lỗi Khi upload");
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -93,12 +90,12 @@ public class ImageServiceImpl implements ImageService {
         if (lastIndexOf == -1) {
             return ""; // empty extension
         }
-        return fileName.substring(lastIndexOf+1);
+        return fileName.substring(lastIndexOf + 1);
     }
 
     @Override
     public boolean checkFileExtension(String fileExtension) {
-        List<String> fileExtensions = Arrays.asList("png","jpg","jpeg","webp");
+        List<String> fileExtensions = Arrays.asList("png", "jpg", "jpeg", "webp");
         return fileExtensions.contains(fileExtension);
     }
 
@@ -129,5 +126,11 @@ public class ImageServiceImpl implements ImageService {
     @Override
     public void saveImage(Image image) {
         imageRepository.save(image);
+    }
+
+    @Override
+    public List<String> getListImageOfUser(String userId) {
+        List<String> images = imageRepository.getListImageOfUser(userId);
+        return images;
     }
 }

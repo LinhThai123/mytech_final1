@@ -18,5 +18,5 @@ public interface ImageRepository extends JpaRepository<Image , String> {
 //    Page<String> getListImageOfUser(String userId , Pageable pageable);
 
     @Query(nativeQuery = true, value = "SELECT link FROM image WHERE  created_by = ?1")
-    List<String> getListImage(String userId);
+    List<String> getListImageOfUser (String userId);
 }

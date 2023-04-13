@@ -18,4 +18,5 @@ public class UserCourseDTO {
     private Timestamp enrollDate;
 
     private int status;
+
 }

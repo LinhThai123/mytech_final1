@@ -31,6 +31,7 @@ public class Image {
     @Column(name = "uploaded_at")
     private Timestamp uploadedAt;
 
-//    @Column(name = "created_by")
-//    private String createdBy;
+    @ManyToOne
+    @JoinColumn(name = "created_by")
+    private User createdBy;
 }

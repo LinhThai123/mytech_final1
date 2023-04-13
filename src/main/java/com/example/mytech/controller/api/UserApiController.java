@@ -137,9 +137,7 @@ public class UserApiController {
         if (user == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Email not found");
         }
-
         String newPassword = forgotPassWordService.generateNewPassword();
-
         String subject = "Password Reset";
         String message = "Your new password is: " + newPassword;
         mailService.sendEmail(user.getEmail(), subject, message);

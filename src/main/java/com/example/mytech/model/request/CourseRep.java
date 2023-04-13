@@ -38,6 +38,10 @@ public class CourseRep {
 
     private Integer level ;
 
+    private int numberOfSessions ;
+
+    private String address ;
+
     private String image;
 
     @JsonProperty("expired_at")

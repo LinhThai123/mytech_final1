@@ -207,7 +207,7 @@
                         </ul>
                     </li>
                     <li class="nav-item has-treeview">
-                        <a href="/admin/posts" class="nav-link">
+                        <a href="/admin/blogs" class="nav-link">
                             <i class="nav-icon fas fa-file"></i>
                             <p>
                                 Quản lý blog
@@ -216,13 +216,13 @@
                         </a>
                         <ul class="nav nav-treeview">
                             <li class="nav-item">
-                                <a href="/admin/posts" class="nav-link">
+                                <a href="/admin/blogs" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Danh sách bài viết</p>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="/admin/posts/create" class="nav-link">
+                                <a href="/admin/blogs/create" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Tạo bài viết mới</p>
                                 </a>
@@ -265,12 +265,12 @@
 
                 <!-- Toolbar -->
                 <div class="toolbar">
-                    <a role="button" class="btn btn-success" href="/admin/posts/create">
+                    <a role="button" class="btn btn-success" href="/admin/blogs/create">
                         <span class="fa fa-plus" style="margin-right:0.5rem;"></span>
                         <span>Viết bài</span>
                     </a>
 
-                    <a role="button" class="btn btn-info" href="/admin/posts">
+                    <a role="button" class="btn btn-info" href="/admin/blogs">
                         <span class="fas fa-redo-alt" style="margin-right:0.5rem;"></span>
                         <span>Refresh</span>
                     </a>
@@ -279,9 +279,6 @@
                         <span>Tìm kiếm</span>
                     </button>
                     <div class="clear"></div>
-                </div>
-                <div th:if="${message != null}" class="alert alert-primary" role="alert">
-                    <i th:text="${message}"></i>
                 </div>
                 <!-- Main content -->
                 <div class="row">
@@ -299,11 +296,11 @@
                                             <th width="15%">
                                                 Trang thái
                                             </th>
-                                            <th width="15%" class="thuy-sort-area" data-order="post.created_at">
+                                            <th width="15%" class="thuy-sort-area" data-order="blog.created_at">
                                                 Ngày tạo
                                                 <i class="fa fa-sort float-right" style="margin-top: 3px;"></i>
                                             </th>
-                                            <th width="15%" class="thuy-sort-area" data-order="post.published_at">
+                                            <th width="15%" class="thuy-sort-area" data-order="blog.published_at">
                                                 Ngày xuất bản
                                                 <i class="fa fa-sort float-right" style="margin-top: 3px;"></i>
                                             </th>
@@ -323,20 +320,24 @@
                                                 <th></th>
                                                 <th></th>
                                                 <input type="hidden" name="page" id="page">
-<!--                                                <input type="hidden" name="order" id="order">-->
-<!--                                                <input type="hidden" name="direction" id="direction">-->
                                             </form>
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <th:block th:each="post : ${posts}">
+                                        <th:block th:each="blog : ${blogs}">
                                             <tr>
                                                 <td>
-                                                    <a th:href="@{/admin/posts/{title}/{id}(title=${post.title},id=${post.id})}" th:text="${post.title}"></a>
+                                                    <a th:href="@{/admin/blogs/{title}(title=${blog.title})}" th:text="${blog.title}"></a>
                                                 </td>
-                                                <td th:text="${post.status}"></td>
-                                                <td th:text="${post.createdAt}"></td>
-                                                <td th:text="${post.publishedAt}"></td>
+                                                <td>
+                                                    <span th:text="${blog.status == 0 ? 'Nháp' : 'Công khai'}"></span>
+                                                </td>
+                                                <td>
+                                                    <span th:text="${#dates.format(blog.createdAt, 'dd-MM-yyyy')}"></span>
+                                                </td>
+                                                <td>
+                                                    <span th:text="${#dates.format(blog.publishedAt, 'dd-MM-yyyy')}"></span>
+                                                </td>
                                             </tr>
                                         </th:block>
                                         </tbody>
@@ -377,17 +378,15 @@
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 <script th:inline="javascript">
-    let title,status, page;
+    let title, page;
     $(function () {
         let vars = parseUrl();
         title = vars["name"] || ""
-        status = vars["category"] || ""
         page = vars["page"] || "1"
         $('#page').val(page)
         $('#title').val(title)
         $('#status').val(status)
         pagination([[${totalPages}]], [[${currentPage}]]);
-
     });
 </script>
 </body>

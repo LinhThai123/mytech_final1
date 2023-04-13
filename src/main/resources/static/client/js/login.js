@@ -64,7 +64,7 @@ function Login() {
         }
         let myJSON = JSON.stringify(req);
         $.ajax({
-            url: '/api/auth/signin',
+            url: '/api/auth/login',
             type: 'POST',
             data: myJSON,
             contentType: "application/json; charset=utf-8",

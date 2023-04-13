@@ -28,6 +28,4 @@ public class EnrollmentApiController {
         userService.enrollCourse(user.getId(), courseId);
         return ResponseEntity.status(HttpStatus.OK).body("Đăng ký khóa học thành công");
     }
-
-
 }

@@ -14,4 +14,6 @@ public class ScheduleDTO {
     private String scheduleId ;
 
     private String courseName ;
+
+    private String courseId ;
 }

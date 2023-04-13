@@ -30,31 +30,6 @@ const fullnameValidatting = () => {
         fullnameSpanBox.innerHTML = "";
     }
 }
-const phoneVaidating = () => {
-    const phoneContainer = document.querySelector(".phone_box");
-    const phoneInputBox = document.querySelector("#phone_register_err");
-    const phoneSpanBox = document.querySelector(".phone_message");
-
-    let phone = phoneInputBox.value;
-    let phoneRegex = /(?=.*[0-9].*[0-9])/;
-
-    if(phone === ""){
-        showErrorStyle(phoneContainer, phoneInputBox, phoneSpanBox);
-        phoneSpanBox.innerHTML = "Hãy điền số điện thoại";
-    }
-    else if(phoneRegex.test(phone) == false) {
-        showErrorStyle(phoneContainer, phoneInputBox, phoneSpanBox);
-        phoneSpanBox.innerHTML = "Số điện thoại không đúng định dạng";
-    }
-    else if(phone.length < 10 || phone.length >12) {
-        showErrorStyle(phoneContainer, phoneInputBox, phoneSpanBox);
-        phoneSpanBox.innerHTML = "Số điện thoại lớn hơn 10 và bé hơn 12 số ";
-    }
-    else {
-        removeErrorStyle(phoneContainer,phoneInputBox,phoneSpanBox);
-        phoneSpanBox.innerHTML = "";
-    }
-}
 const emailValidating = () => {
     const emailContainer = document.querySelector(".email_box");
     const emailInputBox = document.querySelector("#email_register_err");
@@ -76,22 +51,6 @@ const emailValidating = () => {
         emailSpanBox.innerHTML = "";
     }
 }
-const addressValidating = () => {
-    const addressContainer = document.querySelector(".address_box");
-    const addressInputBox = document.querySelector("#address_register_err");
-    const addressSpanBox = document.querySelector(".address_message");
-
-    let address = addressInputBox.value;
-
-    if(address === "") {
-        showErrorStyle(addressContainer,addressInputBox,addressSpanBox);
-        addressSpanBox.innerHTML = "Hãy điền địa chỉ của bạn";
-    }
-    else {
-        removeErrorStyle(addressContainer, addressInputBox, addressSpanBox);
-        addressSpanBox.innerHTML = "";
-    }
-}
 const passValidating = () => {
     const passContainer = document.querySelector(".password_box");
     const passInputBox = document.querySelector("#password_register_err");
@@ -110,16 +69,12 @@ const passValidating = () => {
 }
 function Register() {
     let name = $('#fullname_register_err').val();
-    let phone = $('#phone_register_err').val();
-    let address = $('#address_register_err').val();
     let email = $('#email_register_err').val();
     let password = $('#password_register_err').val();
 
-    if (name !== "" && phone !== "" && address !== "" && email !== "" && password !== "") {
+    if (name !== "" &&  email !== "" && password !== "") {
         req = {
             name: name,
-            phone: phone,
-            address: address,
             email: email,
             password: password
         }
