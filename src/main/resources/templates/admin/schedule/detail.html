@@ -65,8 +65,7 @@
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
         <!-- Brand Logo -->
         <a href="/" class="brand-link">
-            <!--            <img th:src="@{/client/img/mytech.png}" alt="Logo" class="brand-image">-->
-            <span class="brand-text font-weight-light">My Tech</span>
+            <img th:src="@{/client/img/logo.png}" style="width:215px; max-height: 40px;" alt="Logo" class="brand-image">
         </a>
 
         <!-- Sidebar -->
@@ -393,8 +392,8 @@
                                     <div class="form-group">
                                         <label for="update-duration">Ca học</label>
                                         <select class="form-control" id="update-duration" name="update-duration">
-                                            <option value="CA_1">CA 1</option>
-                                            <option value="CA_2">CA 2</option>
+                                            <option th:value="CA_1">CA 1</option>
+                                            <option th:value="CA_2">CA 2</option>
                                         </select>
                                     </div>
                                     <div class="form-group">
