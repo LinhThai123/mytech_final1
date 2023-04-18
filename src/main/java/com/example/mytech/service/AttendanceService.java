@@ -1,12 +1,9 @@
 package com.example.mytech.service;
 
+import com.example.mytech.entity.Attendance;
 import com.example.mytech.entity.User;
-import com.example.mytech.model.dto.AttendanceDTO;
-import com.example.mytech.model.dto.AttendanceResponseDTO;
-import com.example.mytech.model.dto.CourseResponseDTO;
 import com.example.mytech.model.dto.ScheduleResponseDTO;
-import com.example.mytech.utils.PageUtil;
-import org.springframework.data.domain.Page;
+import com.example.mytech.model.request.ChangeAttendanceReq;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,17 +11,12 @@ import java.util.List;
 @Service
 public interface AttendanceService {
 
-    public List<AttendanceDTO> getAttendanceListForCourse(String courseId);
+    public List<Attendance> getAttendanceListByScheduleId(String scheduleId) ;
 
-    public void markAttendance(List<AttendanceDTO> attendanceList) ;
-
-//   public List<AttendanceResponseDTO> getAttendanceListByCourseId (String courseId);
-
-
-    public CourseResponseDTO getAttendanceListByCourseId (String courseId) ;
-
-    public ScheduleResponseDTO getUserOfCourseByScheduleId (String scheduleId);
+    public void getUserOfCourseByScheduleId (String scheduleId);
 
     public List<User> getUsersByScheduleId(String scheduleId) ;
+
+    public Attendance updateAttendanceStatus(String attendanceId, ChangeAttendanceReq req);
 
 }

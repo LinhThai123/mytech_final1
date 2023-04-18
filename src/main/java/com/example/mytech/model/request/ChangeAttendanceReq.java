@@ -1,6 +1,5 @@
-package com.example.mytech.model.dto;
+package com.example.mytech.model.request;
 
-import com.example.mytech.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,9 +9,9 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class AttendanceResponseDTO {
+public class ChangeAttendanceReq {
 
-    private User user ;
+    private String attendanceId ;
 
     private boolean attendance;
 }
