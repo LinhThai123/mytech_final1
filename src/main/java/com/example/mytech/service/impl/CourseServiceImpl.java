@@ -81,17 +81,6 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public Course createCourse(CourseRep rep){
         Course course = new Course();
-        //check end_at
-        Date date = new Date(System.currentTimeMillis()) ;
-        String dateString = String.valueOf(rep.getExpiredAt());
-        SimpleDateFormat formatter = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");
-        Date dateformater = formatter.parse(dateString);
-
-        if (dateformater.before(date)) {
-            throw new BadRequestException("Hạn kết thúc khóa học không hợp lệ");
-        }
-
-        course.setExpiredAt(dateformater);
 
         //check exits name
         if (courseRepository.existsByName(rep.getName())) {
@@ -120,6 +109,8 @@ public class CourseServiceImpl implements CourseService {
         }
         course.setActive(rep.getActive());
 
+        course.setTotalTime(rep.getTotalTime());
+
         course.setStatus(rep.getStatus());
 
         // image of course
@@ -146,12 +137,11 @@ public class CourseServiceImpl implements CourseService {
 
         try {
             courseRepository.save(course);
-
             UserCourse userCourse = new UserCourse();
             userCourse.setCourse(course);
             userCourse.setUser(teacher);
             userCourse.setEnrollDate(new Timestamp(System.currentTimeMillis()));
-            userCourse.setStatus(0);
+            userCourse.setStatus(1);
             userCourseRepository.save(userCourse);
 
         } catch (Exception e) {
@@ -169,12 +159,6 @@ public class CourseServiceImpl implements CourseService {
         if (!rs.isPresent()) {
             throw new NotFoundException("Course do not exits");
         }
-
-        Date date = new Date(System.currentTimeMillis());
-        if (rep.getExpiredAt().before(date)) {
-            throw new BadRequestException("Hạn kết thúc khóa học không hợp lệ");
-        }
-        course.setExpiredAt(rep.getExpiredAt());
 
         course.setName(rep.getName());
         // set slug
@@ -197,6 +181,8 @@ public class CourseServiceImpl implements CourseService {
         course.setImage(rep.getImage());
 
         course.setLevel(rep.getLevel());
+
+        course.setTotalTime(rep.getTotalTime());
 
         // get list category by id
         if (rep.getCategory_id().isEmpty()) {

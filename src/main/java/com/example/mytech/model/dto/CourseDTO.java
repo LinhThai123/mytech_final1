@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -25,8 +26,20 @@ public class CourseDTO {
     private int level ;
     private String image;
     private Timestamp publishedAt;
-    private Date expiredAt;
-    private List<User> users ;
+
+    private int numberOfSessions ;
+
+    private String totalTime;
+
+    private List<String> teacheNames;
+
     private List<Schedule> scheduleList ;
 
+    public List<String> getTeacheNames(List<String> teacherNames) {
+        return teacheNames;
+    }
+
+    public void setTeacheNames(List<String> teacheNames) {
+        this.teacheNames = teacheNames;
+    }
 }

@@ -17,6 +17,9 @@ public interface UserCourseService {
     // find by id
     public UserCourse getUserCourseById (String id) ;
 
+    // update token
+    void updateTokenNotification(String userId, String tokenNotification);
+
     public UserCourse updateStatus (String id, ChangeStatusReq req);
 
     public Page<UserCourse> findUserCourses (String username , String courseName , Integer page ) ;

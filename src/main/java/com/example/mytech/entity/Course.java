@@ -66,8 +66,8 @@ public class Course {
     @Column (name = "published_at")
     private Timestamp publishedAt;
 
-    @Column(name = "expired_at")
-    private Date expiredAt;
+    @Column(name = "total_time")
+    private String totalTime;
 
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
@@ -79,6 +79,7 @@ public class Course {
     private Set<User> users = new HashSet<>();
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Schedule> schedules;
 
     @PreRemove
@@ -89,14 +90,6 @@ public class Course {
     }
     public Date getStartDate() {
         Instant instant = publishedAt.toInstant();
-        Date date = Date.from(instant); // Chuyển đổi từ Instant sang Date
-        return date;
-    }
-    public Date getEndDate() {
-        if (expiredAt == null) {
-            return null;
-        }
-        Instant instant = expiredAt.toInstant();
         Date date = Date.from(instant); // Chuyển đổi từ Instant sang Date
         return date;
     }

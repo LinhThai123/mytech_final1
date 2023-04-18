@@ -67,6 +67,13 @@ public class ScheduleServiceImpl implements ScheduleService {
         SimpleDateFormat formatter = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");
         Date reqDate = formatter.parse(String.valueOf(req.getDay()));
 
+        Date courseStartDate = formatter.parse(String.valueOf(course.getStartDate())) ;
+
+
+        if (reqDate.before(courseStartDate)) {
+            throw new IllegalArgumentException("Ngày học không nằm trong thời gian bắt đầu của khóa học. "
+                    + courseStartDate);
+        }
         schedule.setDay(reqDate);
         schedule.setDayOfWeek(req.getDayOfWeek());
         schedule.setDuration(req.getDuration());
@@ -106,16 +113,6 @@ public class ScheduleServiceImpl implements ScheduleService {
 
         SimpleDateFormat formatter = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");
         Date reqDate = formatter.parse(String.valueOf(req.getDay()));
-
-        // Kiểm tra xem ngày đã tồn tại trong cơ sở dữ liệu hay chưa
-        List<Schedule> existingSchedules = scheduleRepository.findByDayOrCourse(reqDate, schedule.getCourse());
-        for (Schedule existingSchedule : existingSchedules) {
-            String existingDayString = formatter.format(existingSchedule.getDay());
-            Date existingDate = formatter.parse(existingDayString);
-            if (existingDate.equals(reqDate) && existingSchedule.getCourse().getId().equals(schedule.getCourse().getId())) {
-                throw new IllegalArgumentException("Lịch học đã tồn tại.");
-            }
-        }
         schedule.setDay(reqDate);
 
         schedule.setDayOfWeek(DayOfWeek.valueOf(String.valueOf(req.getDayOfWeek())));

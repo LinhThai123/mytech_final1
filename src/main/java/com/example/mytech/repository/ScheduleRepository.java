@@ -25,4 +25,6 @@ public interface ScheduleRepository extends JpaRepository<Schedule, String> {
     List<Schedule> findByDayOrCourse(Date day, Course course);
 
     Schedule findByDayAndCourseId (Date day , String courseId) ;
+
+
 }

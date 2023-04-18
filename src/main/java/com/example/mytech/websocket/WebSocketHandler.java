@@ -72,7 +72,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
                     courseDTO.setLevel(course.getLevel());
                     courseDTO.setImage(course.getImage());
                     courseDTO.setPublishedAt(course.getPublishedAt());
-                    courseDTO.setExpiredAt(course.getExpiredAt());
+                    courseDTO.setTotalTime(course.getTotalTime());
                     courseDTO.setActive(course.getActive());
 
                     // Các trường khác

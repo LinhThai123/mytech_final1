@@ -6,8 +6,10 @@ import com.example.mytech.entity.UserCourse;
 import com.example.mytech.exception.NotFoundException;
 import com.example.mytech.model.dto.UserCourseDTO;
 import com.example.mytech.model.request.ChangeStatusReq;
+import com.example.mytech.notification.NotificationService;
 import com.example.mytech.repository.UserCourseRepository;
 import com.example.mytech.service.UserCourseService;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -26,12 +28,14 @@ public class UserCourseServiceImpl implements UserCourseService {
 
     @Autowired
     private UserCourseRepository userCourseRepository ;
+    @Autowired
+    private NotificationService service;
 
     @Override
     public List<UserCourseDTO> findByUserId(String userId) {
         List<UserCourse> userCourses = userCourseRepository.findByUser_Id(userId);
         return userCourses.stream()
-                .map(uc -> new UserCourseDTO(uc.getCourseId(), uc.getEnrollDate(), uc.getStatus()))
+                .map(uc -> new UserCourseDTO(uc.getCourse().getId(),uc.getCourse().getPublishedAt(),uc.getStatus(),uc.getCourse().getName(),uc.getCourse().getImage(),uc.getCourse().getAddress()))
                 .collect(Collectors.toList());
     }
 
@@ -44,6 +48,16 @@ public class UserCourseServiceImpl implements UserCourseService {
         return rs.get();
     }
 
+    // cập nhật token vào UserCourse
+    @Override
+    public void updateTokenNotification(String userId, String tokenNotification) {
+        List<UserCourse> userCourses = userCourseRepository.findByUser_Id(userId);
+        userCourses.forEach(userCourse -> userCourse.setTokenNotification(tokenNotification));
+        userCourseRepository.saveAll(userCourses);
+    }
+
+
+    @SneakyThrows
     @Override
     public UserCourse updateStatus(String id, ChangeStatusReq req) {
         Optional<UserCourse> rs = userCourseRepository.findById(id);
@@ -52,7 +66,9 @@ public class UserCourseServiceImpl implements UserCourseService {
         }
         UserCourse userCourse = rs.get();
         userCourse.setStatus(req.getStatus());
+
         userCourseRepository.save(userCourse);
+        //service.sendNotification("Bạn đã được thêm vào khóa học","Bạn đã tham gia khóa học thành công: "+userCourse.getCourse().getName(), userCourse.getTokenNotification());
         return userCourse;
     }
 

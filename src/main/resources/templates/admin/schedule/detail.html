@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <link rel="icon" th:href="@{/image/favicon.ico/favicon.ico}" type="image/x-icon"/>
+    <link rel="icon" th:href="@{/image/favicon/favicon.ico}" type="image/x-icon"/>
     <title>Danh Sách Lịch Học</title>
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" th:href="@{/adminlte/plugins/fontawesome-free/css/all.min.css}">
@@ -375,11 +375,11 @@
                                     <input type="hidden"  id="update-schedule-id">
                                     <div class="form-group">
                                         <label for="update-day">Ngày Học</label>
-                                        <input type="date" class="form-control" id="update-day" name="update-day">
+                                        <input type="date" class="form-control" id="update-day" name="update-day" disabled>
                                     </div>
                                     <div class="form-group">
                                         <label for="update-dayOfWeek">Thứ</label>
-                                        <select class="form-control" id="update-dayOfWeek" name="update-dayOfWeek">
+                                        <select class="form-control" id="update-dayOfWeek" name="update-dayOfWeek" disabled>
                                             <option value="MONDAY">Thứ 2</option>
                                             <option value="TUESDAY">Thứ 3</option>
                                             <option value="WEDNESDAY">Thứ 4</option>
@@ -391,7 +391,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="update-duration">Ca học</label>
-                                        <select class="form-control" id="update-duration" name="update-duration">
+                                        <select class="form-control" id="update-duration" name="update-duration" disabled>
                                             <option th:value="CA_1">CA 1</option>
                                             <option th:value="CA_2">CA 2</option>
                                         </select>

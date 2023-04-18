@@ -1,6 +1,7 @@
 package com.example.mytech.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,8 +10,9 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.time.DayOfWeek;
-import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -44,4 +46,17 @@ public class Schedule {
     @JsonBackReference
     private Course course;
 
+    @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<Attendance> attendanceList = new ArrayList<>();
+
+    public void addAttendance(Attendance attendance) {
+        attendanceList.add(attendance);
+        attendance.setSchedule(this);
+    }
+
+    public void removeAttendance(Attendance attendance) {
+        attendanceList.remove(attendance);
+        attendance.setSchedule(null);
+    }
 }

@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <link rel="icon" th:href="@{/image/favicon.ico/favicon.ico}" type="image/x-icon"/>
+    <link rel="icon" th:href="@{/image/favicon/favicon.ico}" type="image/x-icon"/>
     <title>Danh Sách Khóa Học</title>
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" th:href="@{/adminlte/plugins/fontawesome-free/css/all.min.css}">
@@ -302,7 +302,7 @@
                                                 Ngày công khai
                                             </th>
                                             <th width="15%">
-                                                Ngày kết thúc
+                                                Thời gian học
                                             </th>
                                         </tr>
                                         <tr class="heading-search">
@@ -363,11 +363,7 @@
                                                 <td>
                                                     <span th:text="${#dates.format(course.publishedAt, 'dd-MM-yyyy')}"></span>
                                                 </td>
-                                                <td>
-                                                    <th:block th:if="${course.active} == 1">
-                                                        <span th:text="${#dates.format(course.expiredAt, 'dd-MM-yyyy')}"></span>
-                                                    </th:block>
-
+                                                <td th:text="${course.totalTime}">
                                                 </td>
                                             </tr>
                                         </th:block>

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 
 @Controller
@@ -30,5 +31,12 @@ public class UserCourseApiController {
         userCourseService.updateStatus(id, req);
         webSocketHandler.notifyCourseChange();
         return ResponseEntity.ok("Cập nhật thành công");
+    }
+
+
+    @PutMapping("/notification/{userId}")
+    public ResponseEntity<?> updateTokenNotification(@PathVariable String userId, @RequestParam String tokenNotification) {
+        userCourseService.updateTokenNotification(userId, tokenNotification);
+        return ResponseEntity.ok("TokenNotification updated successfully");
     }
 }

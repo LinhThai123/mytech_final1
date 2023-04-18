@@ -5,8 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <link rel="icon" th:href="@{/image/favicon.ico}" type="image/x-icon"/>
-    <link rel="shortcut icon" th:href="@{/image/favicon.ico}" type="image/x-icon"/>
+    <link rel="icon" th:href="@{/image/favicon/favicon.ico}" type="image/x-icon"/>
     <title> Khóa học chi tiết</title>
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" th:href="@{/adminlte/plugins/fontawesome-free/css/all.min.css}">
@@ -303,12 +302,12 @@
                                             </div>
                                             <div class="form-group">
                                                 <div>
-                                                    <label class="required-label">Ngày kết thúc</label>
-                                                    <span class="text-danger" th:if="${#fields.hasErrors('expiredAt')}"
-                                                          th:errors="*{expiredAt}">EndAt Error</span>
+                                                    <label class="required-label">Thời gian học</label>
+                                                    <span class="text-danger" th:if="${#fields.hasErrors('totalTime')}"
+                                                          th:errors="*{totalTime}">totlalTime Error</span>
                                                 </div>
-                                                <input type="date" class="form-control" id="expiredAt" name="expiredAt"
-                                                       th:value="${#dates.format(course.expiredAt, 'yyyy-MM-dd')}">
+                                                <input type="text" class="form-control" id="totalTime" name="totalTime"
+                                                       th:field="*{totalTime}">
                                             </div>
                                             <div class="form-group">
                                                 <label for="active" class="required-label">Trạng thái</label>

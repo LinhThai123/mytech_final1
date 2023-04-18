@@ -40,6 +40,7 @@ public class BlogController {
         model.addAttribute("currentPage", blogs.getPageable().getPageNumber() + 1);
         return "admin/blog/list";
     }
+
     @GetMapping("/blogs/create")
     public String getPostCreatePage(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -51,5 +52,7 @@ public class BlogController {
         }
         return "admin/blog/create";
     }
+
+
 
 }

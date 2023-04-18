@@ -1,6 +1,5 @@
 package com.example.mytech.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,37 +7,35 @@ import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Setter
 @Getter
-@Table(name = "user_course")
-public class UserCourse {
-
+@Setter
+@Entity
+@Table(name = "attendance")
+public class Attendance {
     @GenericGenerator(name = "random_id", strategy = "com.example.mytech.model.custom.RandomIdGenerator")
     @Id
     @GeneratedValue(generator = "random_id")
     private String id;
 
+    @Column(name = "attendance", columnDefinition = "boolean default false")
+    private Boolean attendance;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
-    @JsonBackReference
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "course_id")
-    @JsonBackReference
-    private Course course;
+    @JoinColumn(name = "schedule_id")
+    private Schedule schedule;
 
-    private Timestamp enrollDate;
+    // Các phương thức getter, setter và constructor
 
-    @Column(name = "status" ,columnDefinition = "TINYINT(0)")
-    private int status;
-
-    @Column(name = "token_notification")
-    private String tokenNotification;
+    public Attendance(boolean attendance, User user, Schedule schedule) {
+        this.attendance = attendance;
+        this.user = user;
+        this.schedule = schedule;
+    }
 }
