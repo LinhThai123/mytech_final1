@@ -52,7 +52,20 @@ public class BlogController {
         }
         return "admin/blog/create";
     }
+    @GetMapping("/blogs/{id}")
+    public String getBlogDetailPage(Model model, @PathVariable String id) {
+        // Get list image of user
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication.getPrincipal() instanceof CustomUserDetails) {
+            CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+            User user = userDetails.getUser();
+            List<String> images = imageService.getListImageOfUser(user.getId());
+            model.addAttribute("images", images);
+        }
+        Blog blog = blogService.getBlogById(id);
+        model.addAttribute("blog", blog);
 
-
+        return "admin/blog/detail";
+    }
 
 }

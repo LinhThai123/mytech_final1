@@ -1,15 +1,12 @@
 package com.example.mytech.model.dto;
 
 import com.example.mytech.entity.Schedule;
-import com.example.mytech.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @AllArgsConstructor

@@ -26,5 +26,6 @@ public interface ScheduleRepository extends JpaRepository<Schedule, String> {
 
     Schedule findByDayAndCourseId (Date day , String courseId) ;
 
+    List<Schedule> getScheduleByStatus (Integer status) ;
 
 }

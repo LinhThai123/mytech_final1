@@ -1,5 +1,6 @@
 package com.example.mytech.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -53,6 +54,7 @@ public class Blog implements Serializable {
     @JoinColumn(name = "created_by")
     private User createdBy;
 
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "modified_by")
     private User modifiedBy;

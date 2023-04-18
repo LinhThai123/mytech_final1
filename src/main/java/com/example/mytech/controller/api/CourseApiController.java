@@ -90,12 +90,11 @@ public class CourseApiController {
     public List<CourseDTO> getCoursesWithTeacherAndSchedule() {
         List<Course> courses = courseService.getListCourse();
 
-
         List<CourseDTO> courseDTOs = new ArrayList<>();
 
         for (Course course : courses) {
 
-            List<User> users = teacherService.getUserWithRoleTeacher() ;
+            List<User> users = userService.findUsersWithRoleTeacherInCourse(course.getId()) ;
 
             List<String> teacherNames = new ArrayList<>();
             for (User user : users) {

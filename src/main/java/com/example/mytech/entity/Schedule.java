@@ -50,13 +50,4 @@ public class Schedule {
     @JsonIgnore
     private List<Attendance> attendanceList = new ArrayList<>();
 
-    public void addAttendance(Attendance attendance) {
-        attendanceList.add(attendance);
-        attendance.setSchedule(this);
-    }
-
-    public void removeAttendance(Attendance attendance) {
-        attendanceList.remove(attendance);
-        attendance.setSchedule(null);
-    }
 }
