@@ -32,7 +32,6 @@ public class Attendance {
     private Schedule schedule;
 
     // Các phương thức getter, setter và constructor
-
     public Attendance(boolean attendance, User user, Schedule schedule) {
         this.attendance = attendance;
         this.user = user;

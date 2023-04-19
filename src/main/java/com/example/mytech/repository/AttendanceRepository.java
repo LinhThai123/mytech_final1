@@ -18,4 +18,8 @@ public interface AttendanceRepository extends JpaRepository<Attendance , String>
     @Query("SELECT a FROM Attendance a WHERE a.schedule.id = :scheduleId")
     List<Attendance> getAttendanceListByScheduleId(@Param("scheduleId") String scheduleId);
 
+    List<Attendance> findByAttendanceIsTrue();
+
+    List<Attendance> findByAttendanceIsFalse();
+
 }

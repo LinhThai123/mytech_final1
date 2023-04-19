@@ -80,6 +80,16 @@ public class AttendanceServiceImpl implements AttendanceService {
     }
 
     @Override
+    public List<Attendance> findByAttendanceIsTrue() {
+        return attendanceRepository.findByAttendanceIsTrue();
+    }
+
+    @Override
+    public List<Attendance> findByAttendanceIsFalse() {
+        return attendanceRepository.findByAttendanceIsFalse();
+    }
+
+    @Override
     public List<User> getUsersByScheduleId(String scheduleId) {
         return userRepository.getUsersByScheduleId(scheduleId);
     }

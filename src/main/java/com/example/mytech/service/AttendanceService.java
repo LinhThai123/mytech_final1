@@ -19,4 +19,8 @@ public interface AttendanceService {
 
     public Attendance updateAttendanceStatus(String attendanceId, ChangeAttendanceReq req);
 
+    List<Attendance> findByAttendanceIsTrue();
+
+    List<Attendance> findByAttendanceIsFalse();
+
 }

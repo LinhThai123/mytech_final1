@@ -54,4 +54,18 @@ public class AttendanceApiController {
         }
     }
 
+    // lấy ra danh sach học viên đã điểm danh
+    @GetMapping("/attended/true")
+    public ResponseEntity<List<Attendance>> getAttendancesWithTrueAttendance() {
+        List<Attendance> attendances = attendanceService.findByAttendanceIsTrue();
+        return ResponseEntity.ok(attendances);
+    }
+
+    // lấy ra danh sách học viên chưa điểm danh
+    @GetMapping("/attended/false")
+    public ResponseEntity<List<Attendance>> getAttendancesWithFalseAttendance() {
+        List<Attendance> attendances = attendanceService.findByAttendanceIsFalse();
+        return ResponseEntity.ok(attendances);
+    }
+
 }
