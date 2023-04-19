@@ -2,6 +2,7 @@ package com.example.mytech.controller.api;
 
 import com.example.mytech.entity.Blog;
 import com.example.mytech.entity.User;
+import com.example.mytech.model.dto.BlogDTO;
 import com.example.mytech.model.request.BlogReq;
 import com.example.mytech.security.CustomUserDetails;
 import com.example.mytech.service.BlogService;
@@ -22,10 +23,18 @@ public class BlogApiController {
     @Autowired
     private BlogService blogService ;
 
-    @GetMapping("/admin/blog/list")
-    public ResponseEntity<?> getListBlogAll () {
-        List<Blog> blogs = blogService.getListBlog() ;
-        return ResponseEntity.ok(blogs);
+    @GetMapping("api/blogs/list")
+    public ResponseEntity<?> getBlogWithUser () {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication.getPrincipal() instanceof CustomUserDetails) {
+            CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+            User user = userDetails.getUser();
+            List<BlogDTO> blogs = blogService.getBlogByUserId(user.getId());
+            return ResponseEntity.ok(blogs) ;
+        }
+        else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized"); // Phản hồi 401 Unauthorized
+        }
     }
 
     @PostMapping("/api/admin/blogs")

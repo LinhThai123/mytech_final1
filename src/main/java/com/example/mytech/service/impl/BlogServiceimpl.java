@@ -7,6 +7,7 @@ import com.example.mytech.entity.User;
 import com.example.mytech.exception.BadRequestException;
 import com.example.mytech.exception.InternalServerException;
 import com.example.mytech.exception.NotFoundException;
+import com.example.mytech.model.dto.BlogDTO;
 import com.example.mytech.model.request.BlogReq;
 import com.example.mytech.repository.BlogRepository;
 import com.example.mytech.security.CustomUserDetails;
@@ -21,6 +22,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,6 +35,18 @@ public class BlogServiceimpl implements BlogService {
     @Override
     public List<Blog> getListBlog() {
         return blogRepository.findAll();
+    }
+
+    @Override
+    public List<BlogDTO> getBlogByUserId(String userId) {
+        List<Blog> blogs = blogRepository.findByCreatedBy_Id(userId);
+        List<BlogDTO> blogDTOs = new ArrayList<>();
+
+        for (Blog blog : blogs) {
+            BlogDTO blogDTO = new BlogDTO(blog);
+            blogDTOs.add(blogDTO);
+        }
+        return blogDTOs;
     }
 
     @Override
