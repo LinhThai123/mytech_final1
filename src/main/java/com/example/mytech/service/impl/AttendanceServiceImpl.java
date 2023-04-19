@@ -69,17 +69,6 @@ public class AttendanceServiceImpl implements AttendanceService {
     }
 
     @Override
-    public Attendance updateAttendanceStatus(String attendanceId, ChangeAttendanceReq req) {
-        Attendance attendance = attendanceRepository.findById(attendanceId).orElse(null);
-        if (attendance == null) {
-            throw new RuntimeException("Không tìm thấy đối tượng điểm danh");
-        }
-
-        attendance.setAttendance(req.isAttendance());
-        return attendanceRepository.save(attendance);
-    }
-
-    @Override
     public List<Attendance> findByAttendanceIsTrue() {
         return attendanceRepository.findByAttendanceIsTrue();
     }

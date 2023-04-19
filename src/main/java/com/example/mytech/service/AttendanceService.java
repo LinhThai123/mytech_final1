@@ -17,8 +17,6 @@ public interface AttendanceService {
 
     public List<User> getUsersByScheduleId(String scheduleId) ;
 
-    public Attendance updateAttendanceStatus(String attendanceId, ChangeAttendanceReq req);
-
     List<Attendance> findByAttendanceIsTrue();
 
     List<Attendance> findByAttendanceIsFalse();
