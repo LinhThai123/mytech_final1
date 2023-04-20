@@ -2,6 +2,7 @@ package com.example.mytech.controller.api;
 
 import com.example.mytech.entity.Attendance;
 import com.example.mytech.exception.NotFoundException;
+import com.example.mytech.model.dto.AttendanceDTO;
 import com.example.mytech.model.request.ChangeAttendanceReq;
 import com.example.mytech.repository.AttendanceRepository;
 import com.example.mytech.service.AttendanceService;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 public class AttendanceApiController {
@@ -23,14 +25,6 @@ public class AttendanceApiController {
     @Autowired
     private AttendanceRepository attendanceRepository;
 
-
-    // xem danh sách điểm danh của học viên theo lịch học
-    @GetMapping("/attendance/{scheduleId}")
-    public ResponseEntity<List<Attendance>> getAttendanceListByScheduleId(@PathVariable String scheduleId) {
-        List<Attendance> attendanceList = attendanceService.getAttendanceListByScheduleId(scheduleId);
-        return ResponseEntity.ok(attendanceList);
-    }
-
     // tạo danh sách điểm danh của học viên theo lịch học
     @GetMapping("/schedule/{scheduleId}")
     public ResponseEntity<?> getUserOfCourseListByScheduleId(@PathVariable String scheduleId) {
@@ -38,32 +32,39 @@ public class AttendanceApiController {
              attendanceService.getUserOfCourseByScheduleId(scheduleId);
             return ResponseEntity.ok("Tạo danh sách điểm danh cho học viên thành công");
         } catch (NotFoundException e) {
-            // Xử lý ngoại lệ NotFoundException
             return ResponseEntity.notFound().build();
         } catch (Exception e) {
-            // Xử lý ngoại lệ chung
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
-    // điêm danh cho cả 1 danh sách học viên theo lịch học
-    @PutMapping("/update-attendance")
-    public ResponseEntity<List<Attendance>> updateAttendanceStatus(@RequestBody List<ChangeAttendanceReq> reqs) {
-        List<Attendance> updatedAttendances = new ArrayList<>();
-        for (ChangeAttendanceReq request : reqs) {
-            List<String> attendanceIds = request.getAttendanceIds();
-            for (String attendanceId : attendanceIds) {
-                Attendance attendance = attendanceRepository.findById(attendanceId).orElse(null);
-                if (attendance == null) {
-                    throw new RuntimeException("Không tìm thấy đối tượng điểm danh");
-                }
-                attendance.setAttendance(request.isAttendance());
-                updatedAttendances.add(attendanceRepository.save(attendance));
-            }
+    // lấy ra danh sách học sinh đã tạo
+    @GetMapping("/attendance/{scheduleId}")
+    public ResponseEntity<?> getUserAndAttendanceBySchedule (@PathVariable String scheduleId) {
+        try {
+           List<AttendanceDTO> attendanceDTOS = attendanceService.getUserAndAttendanceByScheduleId(scheduleId) ;
+            return ResponseEntity.ok(attendanceDTOS);
         }
-        return ResponseEntity.ok(updatedAttendances);
+        catch (NotFoundException e) {
+            return ResponseEntity.notFound().build() ;
+        }
+        catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build() ;
+        }
     }
 
+    // thực hiện chức năng điểm danh
+    @PutMapping("/update-attendance")
+    public ResponseEntity<?> updateAttendance(@RequestBody List<AttendanceDTO> attendanceDTOs) {
+        try {
+            attendanceService.updateAttendance(attendanceDTOs);
+            return ResponseEntity.ok("Điểm danh thành công");
+        } catch (NotFoundException e) {
+            return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 
     // lấy ra danh sach học viên đã điểm danh
     @GetMapping("/attended/true")

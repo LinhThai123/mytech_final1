@@ -1,6 +1,8 @@
 package com.example.mytech.service.impl;
 
 import com.example.mytech.entity.*;
+import com.example.mytech.exception.NotFoundException;
+import com.example.mytech.model.dto.AttendanceDTO;
 import com.example.mytech.model.dto.AttendanceResponseDTO;
 import com.example.mytech.model.dto.ScheduleResponseDTO;
 import com.example.mytech.model.request.ChangeAttendanceReq;
@@ -64,11 +66,6 @@ public class AttendanceServiceImpl implements AttendanceService {
     }
 
     @Override
-    public List<Attendance> getAttendanceListByScheduleId(String scheduleId) {
-        return attendanceRepository.getAttendanceListByScheduleId(scheduleId);
-    }
-
-    @Override
     public List<Attendance> findByAttendanceIsTrue() {
         return attendanceRepository.findByAttendanceIsTrue();
     }
@@ -82,4 +79,20 @@ public class AttendanceServiceImpl implements AttendanceService {
     public List<User> getUsersByScheduleId(String scheduleId) {
         return userRepository.getUsersByScheduleId(scheduleId);
     }
+
+    @Override
+    public List<AttendanceDTO> getUserAndAttendanceByScheduleId(String scheduleId) {
+        return attendanceRepository.getUserAndAttendanceByScheduleId(scheduleId);
+    }
+
+    @Override
+    public void updateAttendance(List<AttendanceDTO> attendanceDTOs) {
+        for (AttendanceDTO attendanceDTO : attendanceDTOs) {
+            Attendance attendance = attendanceRepository.findById(attendanceDTO.getAttendanceId())
+                    .orElseThrow(() -> new NotFoundException("Không tìm thấy đối tượng điểm danh"));
+            attendance.setAttendance(attendanceDTO.isAttendance());
+            attendanceRepository.save(attendance);
+        }
+    }
+
 }
