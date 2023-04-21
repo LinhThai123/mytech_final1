@@ -1,20 +1,15 @@
 package com.example.mytech.controller.api;
 
-import com.example.mytech.entity.Attendance;
 import com.example.mytech.exception.NotFoundException;
 import com.example.mytech.model.dto.AttendanceDTO;
-import com.example.mytech.model.request.ChangeAttendanceReq;
-import com.example.mytech.repository.AttendanceRepository;
+import com.example.mytech.model.dto.AttendanceScheduleDTO;
 import com.example.mytech.service.AttendanceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 public class AttendanceApiController {
@@ -22,8 +17,6 @@ public class AttendanceApiController {
     @Autowired
     private AttendanceService attendanceService;
 
-    @Autowired
-    private AttendanceRepository attendanceRepository;
 
     // tạo danh sách điểm danh của học viên theo lịch học
     @GetMapping("/schedule/{scheduleId}")
@@ -54,10 +47,10 @@ public class AttendanceApiController {
     }
 
     // thực hiện chức năng điểm danh
-    @PutMapping("/update-attendance")
-    public ResponseEntity<?> updateAttendance(@RequestBody List<AttendanceDTO> attendanceDTOs) {
+    @PutMapping("/update-attendance/{schedule_id}")
+    public ResponseEntity<?> updateAttendance(@PathVariable("schedule_id") String scheduleId, @RequestBody List<AttendanceDTO> attendanceDTOs) {
         try {
-            attendanceService.updateAttendance(attendanceDTOs);
+            attendanceService.updateAttendance(scheduleId, attendanceDTOs);
             return ResponseEntity.ok("Điểm danh thành công");
         } catch (NotFoundException e) {
             return ResponseEntity.notFound().build();
@@ -66,18 +59,11 @@ public class AttendanceApiController {
         }
     }
 
-    // lấy ra danh sach học viên đã điểm danh
-    @GetMapping("/attended/true")
-    public ResponseEntity<List<Attendance>> getAttendancesWithTrueAttendance() {
-        List<Attendance> attendances = attendanceService.findByAttendanceIsTrue();
-        return ResponseEntity.ok(attendances);
-    }
-
-    // lấy ra danh sách học viên chưa điểm danh
-    @GetMapping("/attended/false")
-    public ResponseEntity<List<Attendance>> getAttendancesWithFalseAttendance() {
-        List<Attendance> attendances = attendanceService.findByAttendanceIsFalse();
-        return ResponseEntity.ok(attendances);
+    // lấy ra danh sách số buổi mà học sinh đó đi học của khóa học
+    @GetMapping("/course/{courseId}/user/{userId}")
+    @ResponseBody
+    public List<AttendanceScheduleDTO> getAttendanceInfoByCourseIdAndUserId(@PathVariable String courseId, @PathVariable String userId) {
+        return attendanceService.getAttendanceInfoByCourseIdAndUserId(courseId, userId);
     }
 
 }

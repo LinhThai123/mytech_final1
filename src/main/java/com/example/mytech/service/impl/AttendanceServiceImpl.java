@@ -4,14 +4,12 @@ import com.example.mytech.entity.*;
 import com.example.mytech.exception.NotFoundException;
 import com.example.mytech.model.dto.AttendanceDTO;
 import com.example.mytech.model.dto.AttendanceResponseDTO;
+import com.example.mytech.model.dto.AttendanceScheduleDTO;
 import com.example.mytech.model.dto.ScheduleResponseDTO;
-import com.example.mytech.model.request.ChangeAttendanceReq;
 import com.example.mytech.repository.AttendanceRepository;
-import com.example.mytech.repository.CourseRepository;
 import com.example.mytech.repository.ScheduleRepository;
 import com.example.mytech.repository.UserRepository;
 import com.example.mytech.service.AttendanceService;
-import com.example.mytech.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -66,16 +64,6 @@ public class AttendanceServiceImpl implements AttendanceService {
     }
 
     @Override
-    public List<Attendance> findByAttendanceIsTrue() {
-        return attendanceRepository.findByAttendanceIsTrue();
-    }
-
-    @Override
-    public List<Attendance> findByAttendanceIsFalse() {
-        return attendanceRepository.findByAttendanceIsFalse();
-    }
-
-    @Override
     public List<User> getUsersByScheduleId(String scheduleId) {
         return userRepository.getUsersByScheduleId(scheduleId);
     }
@@ -88,11 +76,35 @@ public class AttendanceServiceImpl implements AttendanceService {
     @Override
     public void updateAttendance(List<AttendanceDTO> attendanceDTOs) {
         for (AttendanceDTO attendanceDTO : attendanceDTOs) {
-            Attendance attendance = attendanceRepository.findById(attendanceDTO.getAttendanceId())
+            Attendance attendance = attendanceRepository.findById(attendanceDTO.getId())
                     .orElseThrow(() -> new NotFoundException("Không tìm thấy đối tượng điểm danh"));
             attendance.setAttendance(attendanceDTO.isAttendance());
             attendanceRepository.save(attendance);
         }
+    }
+
+    @Override
+    public void updateAttendance(String scheduleId, List<AttendanceDTO> attendanceDTOs) {
+        Schedule schedule = scheduleRepository.findById(scheduleId)
+                .orElseThrow(() -> new NotFoundException("Không tìm thấy lịch trình"));
+
+        for (AttendanceDTO attendanceDTO : attendanceDTOs) {
+            User user = userRepository.findById(attendanceDTO.getId())
+                    .orElseThrow(() -> new NotFoundException("Không tìm thấy người dùng"));
+
+            Attendance attendance = attendanceRepository.findByUserAndSchedule(user, schedule);
+            if (attendance == null) {
+                throw new NotFoundException("Không tìm thấy đối tượng điểm danh");
+            }
+
+            attendance.setAttendance(attendanceDTO.isAttendance());
+            attendanceRepository.save(attendance);
+        }
+    }
+
+    @Override
+    public List<AttendanceScheduleDTO> getAttendanceInfoByCourseIdAndUserId(String courseId, String userId) {
+        return attendanceRepository.getAttendanceInfoByCourseIdAndUserId(courseId, userId);
     }
 
 }
