@@ -18,6 +18,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityNotFoundException;
+import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -32,11 +34,20 @@ public class UserCourseServiceImpl implements UserCourseService {
     private NotificationService service;
 
     @Override
-    public List<UserCourseDTO> findByUserId(String userId) {
-        List<UserCourse> userCourses = userCourseRepository.findByUser_Id(userId);
-        return userCourses.stream()
-                .map(uc -> new UserCourseDTO(uc.getCourse().getId(),uc.getCourse().getPublishedAt(),uc.getStatus(),uc.getCourse().getName(),uc.getCourse().getImage(),uc.getCourse().getAddress()))
-                .collect(Collectors.toList());
+    public List<UserCourseDTO> findByUserId(String id) {
+        List<UserCourseDTO> dtos = new ArrayList<>();
+        List<UserCourse> userCourses = userCourseRepository.findByUser_Id(id);
+        for(UserCourse userCourse : userCourses) {
+            UserCourseDTO dto = new UserCourseDTO();
+            dto.setCourseId(userCourse.getCourse().getId());
+            dto.setEnrollDate(Timestamp.valueOf(userCourse.getEnrollDate().toString()));
+            dto.setStatus(userCourse.getStatus());
+            dto.setImage(userCourse.getCourse().getImage());
+            dto.setName(userCourse.getCourse().getName());
+            dto.setAddress(userCourse.getCourse().getAddress());
+            dtos.add(dto);
+        }
+        return dtos;
     }
 
     @Override

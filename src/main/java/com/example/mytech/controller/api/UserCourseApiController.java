@@ -1,5 +1,6 @@
 package com.example.mytech.controller.api;
 
+import com.example.mytech.model.dto.UserCourseDTO;
 import com.example.mytech.model.request.ChangeStatusReq;
 import com.example.mytech.repository.UserCourseRepository;
 import com.example.mytech.service.UserCourseService;
@@ -7,10 +8,9 @@ import com.example.mytech.websocket.WebSocketHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @Controller
@@ -33,7 +33,11 @@ public class UserCourseApiController {
         return ResponseEntity.ok("Cập nhật thành công");
     }
 
-
+    @GetMapping("/usercourse/{userId}")
+    @ResponseBody
+    public List<UserCourseDTO> getUserCourses( @PathVariable String userId) {
+        return userCourseService.findByUserId(userId);
+    }
     @PutMapping("/notification/{userId}")
     public ResponseEntity<?> updateTokenNotification(@PathVariable String userId, @RequestParam String tokenNotification) {
         userCourseService.updateTokenNotification(userId, tokenNotification);

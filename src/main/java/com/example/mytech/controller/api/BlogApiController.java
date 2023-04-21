@@ -6,6 +6,8 @@ import com.example.mytech.model.dto.BlogDTO;
 import com.example.mytech.model.request.BlogReq;
 import com.example.mytech.security.CustomUserDetails;
 import com.example.mytech.service.BlogService;
+import com.example.mytech.websocket.WebSocketConfig;
+import com.example.mytech.websocket.WebSocketHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +24,9 @@ public class BlogApiController {
 
     @Autowired
     private BlogService blogService ;
+
+    @Autowired
+    private WebSocketHandler webSocketHandler ;
 
     @GetMapping("api/blogs/list")
     public ResponseEntity<?> getBlogWithUser () {
@@ -44,6 +49,7 @@ public class BlogApiController {
             CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
             User user = userDetails.getUser();
             Blog blog = blogService.createBlog(user,req);
+            webSocketHandler.notifyBlogChange();
             return ResponseEntity.ok(blog.getId()) ;
         }
         else {
@@ -58,6 +64,7 @@ public class BlogApiController {
             CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
             User user = userDetails.getUser();
             blogService.updateBlog(req, user, id);
+            webSocketHandler.notifyBlogChange();
             return ResponseEntity.ok("Cập nhật thành công");
         }
         else {
@@ -67,6 +74,7 @@ public class BlogApiController {
     @DeleteMapping("/api/admin/blogs/{id}")
     public ResponseEntity<?> deleteBlog( @PathVariable String id) {
         blogService.deletePost(id);
+        webSocketHandler.notifyBlogChange();
         return ResponseEntity.ok("Xóa thành công");
     }
 }

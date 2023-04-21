@@ -14,7 +14,6 @@ public class WebSocketConfig implements WebSocketConfigurer {
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
         registry.addHandler(myWebSocketHandler(), "/my-websocket-endpoint");
     }
-
     @Bean
     public WebSocketHandler myWebSocketHandler() {
         return new WebSocketHandler();

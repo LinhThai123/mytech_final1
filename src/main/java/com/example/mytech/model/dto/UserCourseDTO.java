@@ -20,7 +20,9 @@ public class UserCourseDTO {
     private int status;
 
     private String name;
+
     private String image;
+
     private String address;
 
 }
