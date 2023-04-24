@@ -28,6 +28,12 @@ public class BlogApiController {
     @Autowired
     private WebSocketHandler webSocketHandler ;
 
+    @GetMapping("api/blogs")
+    @ResponseBody
+    public List<BlogDTO> getAllListBlog () {
+        List<BlogDTO> blogDTOS = blogService.getAllListBlog();
+        return blogDTOS;
+    }
     @GetMapping("api/blogs/list")
     public ResponseEntity<?> getBlogWithUser () {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -41,7 +47,6 @@ public class BlogApiController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized"); // Phản hồi 401 Unauthorized
         }
     }
-
     @PostMapping("/api/admin/blogs")
     public ResponseEntity<?> createBlog(@Valid @RequestBody BlogReq req) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

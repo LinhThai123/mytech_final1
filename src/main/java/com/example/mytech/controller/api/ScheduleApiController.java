@@ -16,7 +16,6 @@ import java.text.ParseException;
 import java.util.List;
 import java.util.Optional;
 
-
 @Controller
 public class ScheduleApiController {
 
@@ -83,7 +82,5 @@ public class ScheduleApiController {
         courseService.saveCourse(course);
         return ResponseEntity.ok().build();
     }
-
-    // giáo viên điểm danh cho học viên
 
 }

@@ -16,6 +16,8 @@ public interface BlogService {
 
     public List<BlogDTO> getBlogByUserId (String userId) ;
 
+    public List<BlogDTO> getAllListBlog () ;
+
     Page<Blog> getAdminBlogPage (String title , Integer page) ;
 
     public Blog createBlog (User user,BlogReq req) ;

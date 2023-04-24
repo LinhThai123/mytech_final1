@@ -50,6 +50,18 @@ public class BlogServiceimpl implements BlogService {
     }
 
     @Override
+    public List<BlogDTO> getAllListBlog() {
+        List<Blog> blogs = blogRepository.findAll();
+        List<BlogDTO> blogDTOS = new ArrayList<>() ;
+
+        for (Blog blog : blogs) {
+            BlogDTO blogDTO = new BlogDTO(blog);
+            blogDTOS.add(blogDTO);
+        }
+        return blogDTOS;
+    }
+
+    @Override
     public Page<Blog> getAdminBlogPage(String title, Integer page) {
         page--;
         if (page < 0) {

@@ -13,6 +13,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Getter
 @Setter
+
 public class AttendanceScheduleDTO {
     private Date day;
     private DayOfWeek dayOfWeek;
