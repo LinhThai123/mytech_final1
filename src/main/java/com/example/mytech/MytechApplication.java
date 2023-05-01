@@ -26,7 +26,7 @@ public class MytechApplication {
                 .fromStream(new ClassPathResource("serviceAccountKey.json").getInputStream());
         FirebaseOptions firebaseOptions = FirebaseOptions.builder()
                 .setCredentials(googleCredentials).build();
-        FirebaseApp app = FirebaseApp.initializeApp(firebaseOptions,"mytech");
+        FirebaseApp app = FirebaseApp.initializeApp(firebaseOptions,"apptech");
         return FirebaseMessaging.getInstance(app);
     }
 

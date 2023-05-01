@@ -39,6 +39,6 @@ public class UserCourse {
     @Column(name = "status" ,columnDefinition = "TINYINT(0)")
     private int status;
 
-    @Column(name = "token_notification")
+    @Column(name = "token_notification", nullable = true)
     private String tokenNotification;
 }

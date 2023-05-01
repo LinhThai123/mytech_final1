@@ -10,9 +10,15 @@ import lombok.Setter;
 @Getter
 @Setter
 public class GradeDTO {
+
     private String courseId;
+
     private String userId;
+
     private float midtermGrades;
+
     private float finalGrades;
+
     private float exams;
+
 }

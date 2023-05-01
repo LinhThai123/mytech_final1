@@ -6,5 +6,5 @@ import org.springframework.stereotype.Service;
 @Service
 public interface ChangePassWordService {
 
-    public void changePassWord (String email , ChangePassWordRep rep) throws Exception;
+    public void changePassWord (String email, ChangePassWordRep rep) throws Exception;
 }

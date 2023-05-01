@@ -23,13 +23,9 @@ public class CourseDTO {
     private int level ;
     private String image;
     private Timestamp publishedAt;
-
     private int numberOfSessions ;
-
     private String totalTime;
-
     private List<String> teacheNames;
-
     private List<Schedule> scheduleList ;
 
     public List<String> getTeacheNames(List<String> teacherNames) {

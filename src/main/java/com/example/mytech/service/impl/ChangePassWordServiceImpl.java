@@ -38,7 +38,7 @@ public class ChangePassWordServiceImpl implements ChangePassWordService {
         user.setPassword(passwordEncoder().encode(rep.getNewpassword()));
         userRepository.save(user);
 
-        mailService.sendEmail(user.getEmail(), "Password Changed", "Your password has been changed successfully.");
+        //mailService.sendEmail(user.getEmail(), "Password Changed", "Your password has been changed successfully.");
     }
 
     private PasswordEncoder passwordEncoder() {

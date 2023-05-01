@@ -4,13 +4,13 @@ import com.example.mytech.model.dto.UserCourseDTO;
 import com.example.mytech.model.request.ChangeStatusReq;
 import com.example.mytech.repository.UserCourseRepository;
 import com.example.mytech.service.UserCourseService;
-import com.example.mytech.websocket.WebSocketHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 
 @Controller
@@ -22,14 +22,10 @@ public class UserCourseApiController {
     @Autowired
     private UserCourseRepository userCourseRepository;
 
-    @Autowired
-    private WebSocketHandler webSocketHandler;
-
     // admin duyệt user đăng ký khóa học
     @PutMapping("/{id}/status")
     public ResponseEntity<Object> updateStatus(@PathVariable("id") String id, @RequestBody ChangeStatusReq req) {
         userCourseService.updateStatus(id, req);
-        webSocketHandler.notifyCourseChange();
         return ResponseEntity.ok("Cập nhật thành công");
     }
 
@@ -38,8 +34,9 @@ public class UserCourseApiController {
     public List<UserCourseDTO> getUserCourses( @PathVariable String userId) {
         return userCourseService.findByUserId(userId);
     }
+
     @PutMapping("/notification/{userId}")
-    public ResponseEntity<?> updateTokenNotification(@PathVariable String userId, @RequestParam String tokenNotification) {
+    public ResponseEntity<?> updateTokenNotification(@PathVariable String userId , @RequestParam String tokenNotification) {
         userCourseService.updateTokenNotification(userId, tokenNotification);
         return ResponseEntity.ok("TokenNotification updated successfully");
     }

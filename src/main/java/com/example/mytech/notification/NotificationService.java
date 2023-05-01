@@ -14,9 +14,7 @@ public class NotificationService {
     @Autowired
     private FirebaseMessaging firebaseMessaging;
 
-
-
-    public void sendNotification(String title, String body,String token) throws FirebaseMessagingException {
+    public void sendNotification (String title, String body,String token) throws FirebaseMessagingException {
         Notification notification = Notification.builder()
                 .setTitle(title)
                 .setBody(body)
@@ -29,6 +27,4 @@ public class NotificationService {
 
         firebaseMessaging.send(message);
     }
-
-
 }

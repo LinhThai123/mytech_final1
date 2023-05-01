@@ -30,6 +30,7 @@ public class UserCourseServiceImpl implements UserCourseService {
 
     @Autowired
     private UserCourseRepository userCourseRepository ;
+
     @Autowired
     private NotificationService service;
 
@@ -49,7 +50,6 @@ public class UserCourseServiceImpl implements UserCourseService {
         }
         return dtos;
     }
-
     @Override
     public UserCourse getUserCourseById(String id) {
         Optional<UserCourse> rs = userCourseRepository.findById(id);
@@ -79,7 +79,7 @@ public class UserCourseServiceImpl implements UserCourseService {
         userCourse.setStatus(req.getStatus());
 
         userCourseRepository.save(userCourse);
-        //service.sendNotification("Bạn đã được thêm vào khóa học","Bạn đã tham gia khóa học thành công: "+userCourse.getCourse().getName(), userCourse.getTokenNotification());
+        service.sendNotification("Bạn đã được thêm vào khóa học","Bạn đã tham gia khóa học thành công: " + userCourse.getCourse().getName(), userCourse.getTokenNotification());
         return userCourse;
     }
 
