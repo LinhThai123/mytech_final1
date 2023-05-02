@@ -12,10 +12,11 @@ import java.util.List;
 
 public interface UserCourseRepository extends JpaRepository<UserCourse, String> {
 
-
     List<UserCourse> findByUser_Id(String id);
 
     List<UserCourse> findByUser(User user);
+
+    List<UserCourse> findByStatus(int status);
 
     boolean existsByTokenNotification (String tokenNotification);
 

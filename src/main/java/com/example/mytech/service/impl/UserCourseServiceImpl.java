@@ -1,7 +1,6 @@
 package com.example.mytech.service.impl;
 
 import com.example.mytech.config.Contant;
-import com.example.mytech.entity.User;
 import com.example.mytech.entity.UserCourse;
 import com.example.mytech.exception.NotFoundException;
 import com.example.mytech.model.dto.UserCourseDTO;
@@ -17,19 +16,17 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
-import javax.persistence.EntityNotFoundException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 
 @Component
 public class UserCourseServiceImpl implements UserCourseService {
 
     @Autowired
-    private UserCourseRepository userCourseRepository ;
+    private UserCourseRepository userCourseRepository;
 
     @Autowired
     private NotificationService service;
@@ -38,7 +35,7 @@ public class UserCourseServiceImpl implements UserCourseService {
     public List<UserCourseDTO> findByUserId(String id) {
         List<UserCourseDTO> dtos = new ArrayList<>();
         List<UserCourse> userCourses = userCourseRepository.findByUser_Id(id);
-        for(UserCourse userCourse : userCourses) {
+        for (UserCourse userCourse : userCourses) {
             UserCourseDTO dto = new UserCourseDTO();
             dto.setCourseId(userCourse.getCourse().getId());
             dto.setEnrollDate(Timestamp.valueOf(userCourse.getEnrollDate().toString()));
@@ -50,6 +47,7 @@ public class UserCourseServiceImpl implements UserCourseService {
         }
         return dtos;
     }
+
     @Override
     public UserCourse getUserCourseById(String id) {
         Optional<UserCourse> rs = userCourseRepository.findById(id);
@@ -79,7 +77,7 @@ public class UserCourseServiceImpl implements UserCourseService {
         userCourse.setStatus(req.getStatus());
 
         userCourseRepository.save(userCourse);
-        service.sendNotification("Bạn đã được thêm vào khóa học","Bạn đã tham gia khóa học thành công: " + userCourse.getCourse().getName(), userCourse.getTokenNotification());
+        service.sendNotification("Bạn đã được thêm vào khóa học", "Bạn đã tham gia khóa học thành công: " + userCourse.getCourse().getName(), userCourse.getTokenNotification());
         return userCourse;
     }
 
@@ -91,5 +89,22 @@ public class UserCourseServiceImpl implements UserCourseService {
         }
         Pageable pageable = PageRequest.of(page, Contant.LIMIT_USERCOURSE, Sort.by("enrollDate").descending());
         return userCourseRepository.findUserCourses(username, courseName, pageable);
+    }
+
+    @Override
+    public List<UserCourseDTO> getUserCoursesByStatus(int status) {
+        List<UserCourse> userCourses = userCourseRepository.findByStatus(status);
+        List<UserCourseDTO> userCourseDTOS = new ArrayList<>();
+        for (UserCourse userCourse : userCourses) {
+            UserCourseDTO userCourseDTO = new UserCourseDTO();
+            userCourseDTO.setCourseId(userCourse.getCourse().getId());
+            userCourseDTO.setEnrollDate(userCourse.getEnrollDate());
+            userCourseDTO.setStatus(userCourse.getStatus());
+            userCourseDTO.setName(userCourse.getUser().getName());
+            userCourseDTO.setImage(userCourse.getUser().getImage());
+            userCourseDTO.setAddress(userCourse.getUser().getAddress());
+            userCourseDTOS.add(userCourseDTO);
+        }
+        return userCourseDTOS;
     }
 }

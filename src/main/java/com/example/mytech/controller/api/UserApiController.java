@@ -13,6 +13,7 @@ import com.example.mytech.service.*;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -21,11 +22,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.socket.WebSocketHandler;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
@@ -103,11 +106,12 @@ public class UserApiController {
     }
 
     // update profile
-    @PostMapping("/update-profile")
-    public ResponseEntity<?> updateProfile(@Valid @RequestBody UpdateProfileReq req) {
+    @PostMapping(value = "/update-profile", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> updateProfile(@Valid @RequestBody UpdateProfileReq req,
+                                           @RequestPart(value = "image" , required = false)MultipartFile image) throws IOException {
         User user = ((CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser();
 
-        user = userService.updateProfile(user, req);
+        user = userService.updateProfile(user, req, image);
         UserDetails principal = new CustomUserDetails(user);
         Authentication authentication = new UsernamePasswordAuthenticationToken(principal, null, principal.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);

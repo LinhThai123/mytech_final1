@@ -40,4 +40,10 @@ public class UserCourseApiController {
         userCourseService.updateTokenNotification(userId, tokenNotification);
         return ResponseEntity.ok("TokenNotification updated successfully");
     }
+
+    @GetMapping("/users/status")
+    public ResponseEntity<List<UserCourseDTO>> getUserCoursesByStatus(@RequestParam(value = "status", defaultValue = "0") int status) {
+        List<UserCourseDTO> userCourses = userCourseService.getUserCoursesByStatus(status);
+        return ResponseEntity.ok(userCourses);
+    }
 }

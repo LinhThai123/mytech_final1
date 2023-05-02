@@ -23,4 +23,6 @@ public interface UserCourseService {
     public UserCourse updateStatus (String id, ChangeStatusReq req);
 
     public Page<UserCourse> findUserCourses (String username , String courseName , Integer page ) ;
+
+    public List<UserCourseDTO> getUserCoursesByStatus(int status);
 }

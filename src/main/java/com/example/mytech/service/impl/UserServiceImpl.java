@@ -25,9 +25,15 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityNotFoundException;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -38,6 +44,8 @@ import java.util.stream.Collectors;
 
 @Component
 public class UserServiceImpl implements UserService {
+
+    private final String imageDir = "src/main/resources/static/uploads" ;
     @Autowired
     private UserRepository userRepository;
 
@@ -268,11 +276,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateProfile(User user, UpdateProfileReq req) {
+    public User updateProfile(User user, UpdateProfileReq req, MultipartFile image) throws IOException {
         user.setName(req.getName());
         user.setDateOfBirth(req.getDateOfBirth());
         user.setGender(req.getGender());
         user.setAddress(req.getAddress());
+        if(!image.isEmpty()) {
+            String fileName = StringUtils.cleanPath(image.getOriginalFilename());
+            Path imagePath = Paths.get(imageDir , fileName);
+            Files.copy(image.getInputStream(), imagePath, StandardCopyOption.REPLACE_EXISTING);
+
+            String fileUrl = "/api/files/" + fileName ;
+            user.setImage(fileUrl);
+        }
         user.setPhone(req.getPhone());
         user.setModifiedAt(new Timestamp(System.currentTimeMillis())); // ẩn trên giao diên
         try{

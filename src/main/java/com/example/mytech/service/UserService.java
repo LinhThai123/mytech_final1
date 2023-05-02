@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -40,7 +41,7 @@ public interface UserService {
     public User getUserById (String id) ;
 
     // update profile
-    public User updateProfile (User user , UpdateProfileReq req) ;
+    public User updateProfile (User user , UpdateProfileReq req , MultipartFile image) throws IOException;
 
     // uploadFile
     public String uploadFile(MultipartFile file) ;
