@@ -107,11 +107,11 @@ public class UserApiController {
 
     // update profile
     @PostMapping(value = "/update-profile", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> updateProfile(@Valid @RequestBody UpdateProfileReq req,
-                                           @RequestPart(value = "image" , required = false)MultipartFile image) throws IOException {
+    public ResponseEntity<?> updateProfile(@RequestPart("req") UpdateProfileReq req,
+                                           @RequestPart(value = "image", required = false) MultipartFile imageFile) throws IOException {
         User user = ((CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser();
 
-        user = userService.updateProfile(user, req, image);
+        user = userService.updateProfile(user, req, imageFile);
         UserDetails principal = new CustomUserDetails(user);
         Authentication authentication = new UsernamePasswordAuthenticationToken(principal, null, principal.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);

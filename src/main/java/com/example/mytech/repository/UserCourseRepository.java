@@ -16,7 +16,7 @@ public interface UserCourseRepository extends JpaRepository<UserCourse, String> 
 
     List<UserCourse> findByUser(User user);
 
-    List<UserCourse> findByStatus(int status);
+    List<UserCourse> findByUser_IdAndStatus (String userId, int status);
 
     boolean existsByTokenNotification (String tokenNotification);
 

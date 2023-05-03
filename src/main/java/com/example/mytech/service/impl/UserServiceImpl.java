@@ -45,7 +45,7 @@ import java.util.stream.Collectors;
 @Component
 public class UserServiceImpl implements UserService {
 
-    private final String imageDir = "src/main/resources/static/uploads" ;
+    private final String imagesDirectory = "src/main/resources/static/uploads";
     @Autowired
     private UserRepository userRepository;
 
@@ -276,34 +276,36 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateProfile(User user, UpdateProfileReq req, MultipartFile image) throws IOException {
+    public User updateProfile(User user, UpdateProfileReq req, MultipartFile imageFile) throws IOException {
         user.setName(req.getName());
         user.setDateOfBirth(req.getDateOfBirth());
         user.setGender(req.getGender());
         user.setAddress(req.getAddress());
-        if(!image.isEmpty()) {
-            String fileName = StringUtils.cleanPath(image.getOriginalFilename());
-            Path imagePath = Paths.get(imageDir , fileName);
-            Files.copy(image.getInputStream(), imagePath, StandardCopyOption.REPLACE_EXISTING);
 
-            String fileUrl = "/api/files/" + fileName ;
+        if (!imageFile.isEmpty()) {
+            String fileName = StringUtils.cleanPath(imageFile.getOriginalFilename());
+            Path imagePath = Paths.get(imagesDirectory, fileName);
+            Files.copy(imageFile.getInputStream(), imagePath, StandardCopyOption.REPLACE_EXISTING);
+
+            // Lưu ảnh tại "/api/files/"
+            String fileUrl = "/api/files/" + fileName;
             user.setImage(fileUrl);
         }
+
         user.setPhone(req.getPhone());
-        user.setModifiedAt(new Timestamp(System.currentTimeMillis())); // ẩn trên giao diên
-        try{
+        user.setModifiedAt(new Timestamp(System.currentTimeMillis()));
+        try {
             userRepository.save(user);
-            return user ;
-        }
-        catch (Exception e) {
+            return user;
+        } catch (Exception e) {
             throw new InternalServerException("Cập nhật profile thất bại");
         }
     }
-
     @Override
     public String uploadFile(MultipartFile file) {
         return imageService.uploadFile(file);
     }
+
 
     @Override
     public List<User> findUsersWithRoleUserInCourse(String courseId) {

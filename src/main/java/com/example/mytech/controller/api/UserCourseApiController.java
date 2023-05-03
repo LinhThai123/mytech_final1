@@ -1,10 +1,13 @@
 package com.example.mytech.controller.api;
 
+import com.example.mytech.model.dto.CourseDTO;
 import com.example.mytech.model.dto.UserCourseDTO;
 import com.example.mytech.model.request.ChangeStatusReq;
 import com.example.mytech.repository.UserCourseRepository;
+import com.example.mytech.service.CourseService;
 import com.example.mytech.service.UserCourseService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +23,7 @@ public class UserCourseApiController {
     private UserCourseService userCourseService;
 
     @Autowired
-    private UserCourseRepository userCourseRepository;
+    private CourseService courseService;
 
     // admin duyệt user đăng ký khóa học
     @PutMapping("/{id}/status")
@@ -41,9 +44,9 @@ public class UserCourseApiController {
         return ResponseEntity.ok("TokenNotification updated successfully");
     }
 
-    @GetMapping("/users/status")
-    public ResponseEntity<List<UserCourseDTO>> getUserCoursesByStatus(@RequestParam(value = "status", defaultValue = "0") int status) {
-        List<UserCourseDTO> userCourses = userCourseService.getUserCoursesByStatus(status);
-        return ResponseEntity.ok(userCourses);
+    @GetMapping("/pending/{userId}")
+    public ResponseEntity<List<CourseDTO>> getUserPendingCourses(@PathVariable String userId) {
+        List<CourseDTO> courses = userCourseService.getUserPendingCourses(userId);
+        return new ResponseEntity<>(courses, HttpStatus.OK);
     }
 }

@@ -41,8 +41,7 @@ public interface UserService {
     public User getUserById (String id) ;
 
     // update profile
-    public User updateProfile (User user , UpdateProfileReq req , MultipartFile image) throws IOException;
-
+    public User updateProfile(User user, UpdateProfileReq req, MultipartFile imageFile) throws IOException;
     // uploadFile
     public String uploadFile(MultipartFile file) ;
 
@@ -53,7 +52,5 @@ public interface UserService {
     public List<Course> enrollCourse (String userId , String courseId) ;
 
     public byte[] readFile (String fileId) ;
-
-
 
 }
