@@ -3,6 +3,7 @@ package com.example.mytech.service;
 import com.example.mytech.entity.Course;
 import com.example.mytech.entity.Rank;
 import com.example.mytech.entity.User;
+import com.example.mytech.model.dto.RankUserDTO;
 import com.example.mytech.model.request.RankReq;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,8 @@ public interface RankService {
     public Rank updateRank(String id, String user_id, RankReq req);
 
     public List<Rank> getRanksByCourseId(String course_id);
+
+    public RankUserDTO getRankByCourseIdAndUserId (String courseId, String userId);
 
     public void deleteRankById(String id);
 }

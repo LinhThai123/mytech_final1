@@ -3,6 +3,7 @@ package com.example.mytech.controller.api;
 import com.example.mytech.entity.Course;
 import com.example.mytech.entity.Rank;
 import com.example.mytech.entity.User;
+import com.example.mytech.model.dto.RankUserDTO;
 import com.example.mytech.model.request.RankReq;
 import com.example.mytech.service.CourseService;
 import com.example.mytech.service.RankService;
@@ -49,6 +50,12 @@ public class RankApiController {
         // Gọi phương thức updateRank của lớp RankService và trả về kết quả
         Rank updatedRank = rankService.updateRank(course_id, user_id, req);
         return ResponseEntity.ok(updatedRank);
+    }
+
+    @GetMapping("/rank/{courseId}/{userId}")
+    public ResponseEntity<RankUserDTO> getRanksByCourseIdAndStudentId(@PathVariable String courseId, @PathVariable String userId) {
+        RankUserDTO rank = rankService.getRankByCourseIdAndUserId(courseId, userId);
+        return ResponseEntity.ok(rank);
     }
 
     @GetMapping("/rank/{course_id}")

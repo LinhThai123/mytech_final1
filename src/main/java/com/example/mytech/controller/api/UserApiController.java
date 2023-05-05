@@ -107,15 +107,19 @@ public class UserApiController {
 
     // update profile
     @PostMapping(value = "/update-profile", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> updateProfile(@RequestPart("req") UpdateProfileReq req,
+    public ResponseEntity<?> updateProfile(@RequestPart(value = "req") UpdateProfileReq req,
                                            @RequestPart(value = "image", required = false) MultipartFile imageFile) throws IOException {
-        User user = ((CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser();
-
-        user = userService.updateProfile(user, req, imageFile);
-        UserDetails principal = new CustomUserDetails(user);
-        Authentication authentication = new UsernamePasswordAuthenticationToken(principal, null, principal.getAuthorities());
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        return ResponseEntity.ok("Cập nhật profile thành công");
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication instanceof UsernamePasswordAuthenticationToken) {
+            User user = ((CustomUserDetails) authentication.getPrincipal()).getUser();
+            user = userService.updateProfile(user, req, imageFile);
+            UserDetails principal = new CustomUserDetails(user);
+            authentication = new UsernamePasswordAuthenticationToken(principal, null, principal.getAuthorities());
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            return ResponseEntity.ok("Cập nhật profile thành công");
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Không tìm thấy thông tin người dùng");
+        }
     }
 
     // get list course of user isLogined
@@ -125,14 +129,11 @@ public class UserApiController {
     }
 
     // thay đổi password
-    @SneakyThrows
-    @PostMapping("/change-password")
-    public ResponseEntity<?> changePassword(HttpServletRequest request, @RequestBody ChangePassWordRep rep) {
-        String email = jwtTokenUtil.getEmailFromToken(request.getHeader("Authorization").substring(7));
-        changePassWordService.changePassWord(email, rep);
+    @PostMapping("/change-password/{id}")
+    public ResponseEntity<?> changePassword(@PathVariable("id") String id, @RequestBody ChangePassWordRep rep) throws Exception {
+        changePassWordService.changePassWord(id, rep);
         return ResponseEntity.ok().body("Password changed successfully.");
     }
-
     // quên mật khẩu
     @PostMapping("/forgot-password")
     public ResponseEntity<?> processForgotPassword(@RequestParam("email") String email) {

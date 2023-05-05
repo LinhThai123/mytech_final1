@@ -305,8 +305,6 @@ public class UserServiceImpl implements UserService {
     public String uploadFile(MultipartFile file) {
         return imageService.uploadFile(file);
     }
-
-
     @Override
     public List<User> findUsersWithRoleUserInCourse(String courseId) {
         return userRepository.findUsersWithRoleUserInCourse(courseId);

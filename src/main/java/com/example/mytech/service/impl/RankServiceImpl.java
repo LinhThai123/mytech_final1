@@ -6,28 +6,36 @@ import com.example.mytech.entity.Rank;
 import com.example.mytech.entity.User;
 import com.example.mytech.exception.InternalServerException;
 import com.example.mytech.exception.NotFoundException;
+import com.example.mytech.model.dto.RankUserDTO;
 import com.example.mytech.model.request.RankReq;
+import com.example.mytech.repository.CourseRepository;
 import com.example.mytech.repository.RankRepository;
-import com.example.mytech.service.CourseService;
+import com.example.mytech.repository.UserRepository;
 import com.example.mytech.service.RankService;
-import com.example.mytech.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class RankServiceImpl implements RankService {
 
     @Autowired
-    private RankRepository rankRepository ;
+    private RankRepository rankRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private CourseRepository courseRepository;
 
     @Override
     public void addGrade(User user, Course course, RankReq req) {
-        Rank rank = rankRepository.findByUserAndCourse(user, course) ;
+        Rank rank = rankRepository.findByUserAndCourse(user, course);
 
         if (rank == null) {
-            rank = new Rank() ;
+            rank = new Rank();
             rank.setUser(user);
             rank.setCourse(course);
         }
@@ -41,10 +49,9 @@ public class RankServiceImpl implements RankService {
         } else {
             rank.setRanking("Fail");
         }
-        try{
+        try {
             rankRepository.save(rank);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             throw new InternalServerException("Lỗi khi thêm điểm cho học viên");
         }
     }
@@ -67,10 +74,9 @@ public class RankServiceImpl implements RankService {
         } else {
             existingRank.setRanking("Fail");
         }
-        try{
+        try {
             rankRepository.save(existingRank);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             throw new InternalServerException("Lỗi khi cập nhật điểm cho học viên");
         }
         return existingRank;
@@ -80,6 +86,27 @@ public class RankServiceImpl implements RankService {
     public List<Rank> getRanksByCourseId(String course_id) {
         return rankRepository.findByCourseId(course_id);
     }
+
+    @Override
+    public RankUserDTO getRankByCourseIdAndUserId(String courseId, String userId) {
+
+        Optional<User> user = userRepository.findById(userId) ;
+        if(!user.isPresent()) {
+            throw new NotFoundException("Không tìm thấy học viên");
+        }
+
+        Rank rank = rankRepository.findByCourseIdAndUserId(courseId, user.get().getId());
+        RankUserDTO dto = new RankUserDTO();
+        dto.setName(user.get().getName());
+        dto.setImage(user.get().getImage());
+        dto.setMidtermGrades(rank.getMidtermGrades());
+        dto.setFinalGrades(rank.getFinalGrades());
+        dto.setExams(rank.getExams());
+        dto.setAvg(rank.getAvg());
+        dto.setRanking(rank.getRanking());
+        return dto;
+    }
+
 
     @Override
     public void deleteRankById(String id) {
