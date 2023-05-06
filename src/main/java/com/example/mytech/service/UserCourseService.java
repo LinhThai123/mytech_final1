@@ -25,4 +25,6 @@ public interface UserCourseService {
     public Page<UserCourse> findUserCourses (String username , String courseName , Integer page ) ;
 
     public List<CourseDTO> getUserPendingCourses(String userId) ;
+
+    public List<String> getTeacherNames(String courseId);
 }

@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -24,5 +25,7 @@ public class UserCourseDTO {
     private String image;
 
     private String address;
+
+    private List<String> nameTeacher ;
 
 }

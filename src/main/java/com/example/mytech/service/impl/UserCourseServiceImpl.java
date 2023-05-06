@@ -1,17 +1,16 @@
 package com.example.mytech.service.impl;
 
 import com.example.mytech.config.Contant;
-import com.example.mytech.entity.Course;
-import com.example.mytech.entity.Schedule;
-import com.example.mytech.entity.User;
-import com.example.mytech.entity.UserCourse;
+import com.example.mytech.entity.*;
 import com.example.mytech.exception.NotFoundException;
 import com.example.mytech.model.dto.CourseDTO;
 import com.example.mytech.model.dto.UserCourseDTO;
 import com.example.mytech.model.request.ChangeStatusReq;
 import com.example.mytech.notification.NotificationService;
 import com.example.mytech.repository.UserCourseRepository;
+import com.example.mytech.repository.UserRepository;
 import com.example.mytech.service.CourseService;
+import com.example.mytech.service.TeacherService;
 import com.example.mytech.service.UserCourseService;
 import com.example.mytech.service.UserService;
 import lombok.SneakyThrows;
@@ -40,7 +39,7 @@ public class UserCourseServiceImpl implements UserCourseService {
     private NotificationService service;
 
     @Autowired
-    private CourseService courseService ;
+    private UserRepository  userRepository ;
 
     @Autowired
     private UserService userService;
@@ -57,6 +56,7 @@ public class UserCourseServiceImpl implements UserCourseService {
             dto.setImage(userCourse.getCourse().getImage());
             dto.setName(userCourse.getCourse().getName());
             dto.setAddress(userCourse.getCourse().getAddress());
+            dto.setNameTeacher(getTeacherNames(userCourse.getCourse().getId()));
             dtos.add(dto);
         }
         return dtos;
@@ -136,4 +136,13 @@ public class UserCourseServiceImpl implements UserCourseService {
         return pendingCourseDTOs;
     }
 
+    @Override
+    public List<String> getTeacherNames(String courseId) {
+        List<String> teacherNames = new ArrayList<>();
+        List<User> teachers = userRepository.findUsersWithRoleTeacherInCourse(courseId);
+        for (User teacher : teachers) {
+            teacherNames.add(teacher.getName());
+        }
+        return teacherNames;
+    }
 }
