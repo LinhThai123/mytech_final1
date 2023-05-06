@@ -41,6 +41,9 @@ public class Schedule {
     @Column(name = "status" ,columnDefinition = "TINYINT(1)") // 1 học , 0 nghỉ
     private int status ;
 
+    @Column(name = "numberOfSession")
+    private int number ;
+
     @ManyToOne
     @JoinColumn(name = "course_id", nullable = false)
     @JsonBackReference

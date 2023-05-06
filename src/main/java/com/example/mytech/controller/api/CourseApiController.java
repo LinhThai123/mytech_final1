@@ -31,14 +31,6 @@ public class CourseApiController {
     @Autowired
     private UserService userService ;
 
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private ScheduleService scheduleService;
-
-    @Autowired
-    private TeacherService teacherService ;
 
     //get list course
     @GetMapping ("/admin/course/list")

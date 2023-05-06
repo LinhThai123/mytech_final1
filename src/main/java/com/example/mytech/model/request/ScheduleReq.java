@@ -29,5 +29,7 @@ public class ScheduleReq {
 
     private Integer status ;
 
+    private Integer number ;
+
     private String course_id;
 }
